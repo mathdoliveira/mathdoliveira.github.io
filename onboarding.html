@@ -4,7 +4,7 @@
 <title>re:match — build your style profile</title>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
-<meta name="description" content="Build your re:match style profile in four gentle steps — palette, silhouette, brands, budget.">
+<meta name="description" content="Build your re:match style profile in four gentle steps: palette, silhouette, brands, budget.">
 <meta name="theme-color" content="#2f3a2e">
 <link rel="icon" type="image/svg+xml" href="favicon.svg">
 <link rel="canonical" href="https://matheusdoliveira.com/onboarding.html">
@@ -132,7 +132,7 @@
 <div class="ob-shell">
   <aside class="ob-left">
     <a href="./" class="logo"><div class="mark">re:match</div><div class="sub">Fashion you love. Again.</div></a>
-    <h2 class="ob-title">Let's find what you <span class="em">truly love.</span></h2>
+    <h2 class="ob-title">Find what you <span class="em">actually love.</span></h2>
     <p class="ob-lede">A ~90-second profile. The more you tell us, the better your matches get. You can change anything, anytime.</p>
 
     <ol class="steps" id="steps">
@@ -144,7 +144,7 @@
       <li data-s="6"><span class="n">6</span> Ready to match</li>
     </ol>
 
-    <p class="ai-note">Our AI uses your answers plus every swipe to learn your real taste. It improves quietly, in the background.</p>
+    <p class="ai-note">Our AI uses your answers plus every swipe to learn your taste. It improves quietly in the background.</p>
   </aside>
 
   <main class="ob-right" id="main">
@@ -240,7 +240,7 @@ function renderWelcome(){
   screen.innerHTML = `
     <div class="step-head">
       <h2>Welcome to <span class="em">re:match.</span></h2>
-      <p>Before you swipe, teach our AI the shape of your taste. We'll use it to curate a small, considered feed — never an endless scroll.</p>
+      <p>Before you swipe, teach our AI the shape of your taste. We'll use it to pick a small daily feed, not an endless scroll.</p>
     </div>
     <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:680px;margin-bottom:30px">
       ${[
@@ -384,7 +384,7 @@ function renderColors(){
   screen.innerHTML = `
     <div class="step-head">
       <h2>Colours you <span class="em">live in.</span></h2>
-      <p>We'll bias your feed toward these tones — not to the exclusion of everything else.</p>
+      <p>We'll bias your feed toward these tones, without cutting everything else out.</p>
     </div>
     <div class="swatch-grid">
       ${COLORS.map(c=>`<div style="text-align:center">
@@ -433,7 +433,7 @@ function renderDone(){
         <div class="ps-item"><div class="lbl">Budget</div><div class="v">€${state.budget[0]} – €${state.budget[1]}${state.budget[1]===1000?"+":""}</div></div>
         <div class="ps-item" style="grid-column:1/-1"><div class="lbl">Colours</div><div class="chips">${colorsArr.map(s=>`<span class="chip">${s}</span>`).join('')}</div></div>
       </div>
-      <p class="mono" style="color:var(--mute)">Your first daily drop — 12 pieces — is waiting.</p>
+      <p class="mono" style="color:var(--mute)">Your first daily drop of 12 pieces is waiting.</p>
     </div>
   `;
 }
