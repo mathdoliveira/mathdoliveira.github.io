@@ -336,6 +336,14 @@ const TWEAKS = /*EDITMODE-BEGIN*/{
     .how-grid{grid-template-columns:repeat(2,1fr)}
     .circ-grid{grid-template-columns:1fr}
   }
+
+  /* stub / placeholder controls (concept site — decorative, not wired) */
+  a:not([href]){cursor:default}
+  .is-stub{cursor:default;opacity:.55}
+  .is-stub:hover{background:transparent;color:inherit}
+  .btn.is-stub,.btn.is-stub:hover{border-style:dashed;border-color:var(--line);background:transparent;color:var(--mute)}
+  .foot-grid a:not([href]){color:var(--mute);opacity:.6;pointer-events:none}
+  .foot-grid a:not([href]):hover{color:var(--mute)}
 </style>
 </head>
 <body>
@@ -355,7 +363,7 @@ const TWEAKS = /*EDITMODE-BEGIN*/{
     </div>
     <div class="nav-cta">
       <a href="onboarding.html" class="btn btn-dark">Start matching</a>
-      <button class="btn">Log in</button>
+      <button class="btn is-stub" type="button" tabindex="-1" aria-disabled="true" title="Concept site — not wired">Log in</button>
     </div>
   </div>
 </nav>

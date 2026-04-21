@@ -79,3 +79,14 @@ footer{padding:60px 44px 44px;border-top:1px solid var(--line);margin-top:60px}
 /* placeholder product photo */
 .ph{background:#e8e1d2;position:relative;overflow:hidden;display:block}
 .ph svg{width:100%;height:100%;display:block}
+
+/* ---- stub / placeholder controls (concept site — these are decorative, not wired) ---- */
+a:not([href]){cursor:default}
+.is-stub{cursor:default;opacity:.55}
+.is-stub:hover{background:transparent;color:inherit}
+.btn.is-stub,.btn.is-stub:hover{border-style:dashed;border-color:var(--line);background:transparent;color:var(--mute)}
+.btn-dark.is-stub,.btn-dark.is-stub:hover{background:transparent;color:var(--mute);border-color:var(--line)}
+.foot-grid a:not([href]){color:var(--mute);opacity:.6;pointer-events:none}
+.foot-grid a:not([href]):hover{color:var(--mute)}
+a.edit:not([href]){color:var(--mute);opacity:.7;cursor:default;text-decoration:none}
+.brumb a:not([href]),.crumbs a:not([href]){color:var(--mute);opacity:.7;text-decoration:none}
