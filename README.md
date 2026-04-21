@@ -1,3 +1,13 @@
+---
+title: re:match
+emoji: 👗
+colorFrom: green
+colorTo: yellow
+sdk: static
+pinned: false
+short_description: The fashion matchmaker — swipe, match, love again.
+---
+
 # re:match
 
 *A concept site for a luxury resale experience — swipe, match, love again.*
