@@ -13,11 +13,11 @@
 <meta property="og:title" content="re:match — the fashion matchmaker">
 <meta property="og:description" content="Swipe. Match. Love again. A luxury resale experience where pieces find their next chapter.">
 <meta property="og:url" content="https://matheusdoliveira.com/">
-<meta property="og:image" content="https://matheusdoliveira.com/uploads/concept%20webpage.png">
+<meta property="og:image" content="https://matheusdoliveira.com/uploads/social/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="re:match — the fashion matchmaker">
 <meta name="twitter:description" content="Swipe. Match. Love again.">
-<meta name="twitter:image" content="https://matheusdoliveira.com/uploads/concept%20webpage.png">
+<meta name="twitter:image" content="https://matheusdoliveira.com/uploads/social/og-image.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&family=Caveat:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -337,6 +337,10 @@ const TWEAKS = /*EDITMODE-BEGIN*/{
     .circ-grid{grid-template-columns:1fr}
   }
 
+  /* drop-in real images overlay any placeholder, remove themselves on 404 */
+  img.real{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;z-index:3;display:block;border-radius:inherit}
+  .trust-visual{position:relative}
+
   /* stub / placeholder controls (concept site — decorative, not wired) */
   a:not([href]){cursor:default}
   .is-stub{cursor:default;opacity:.55}
@@ -651,6 +655,7 @@ const TWEAKS = /*EDITMODE-BEGIN*/{
       </div>
 
       <div class="trust-visual">
+        <img class="real" src="uploads/editorial/trust-authentication.jpg" alt="Authentication in progress — a re:match specialist inspecting a piece" onerror="this.remove()">
         <svg class="placeholder" viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice">
           <defs>
             <pattern id="stripe" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
@@ -777,6 +782,7 @@ const ITEMS = [
     material: "Leather",
     chips: [["eco","Low impact"],["lux","Circular Choice"]],
     rotate: -1,
+    img: "acne-leather-jacket.jpg",
     swatch: {bg:"#7c5a3e", stripe:"#5e4430", label:"vintage leather jacket"}
   },
   {
@@ -789,6 +795,7 @@ const ITEMS = [
     material: "Leather",
     chips: [["lux","Authenticated"],["eco","Timeless piece"]],
     rotate: 4,
+    img: "chanel-flap-bag.jpg",
     swatch: {bg:"#1c1a18", stripe:"#2e2a26", label:"quilted flap bag"}
   },
   {
@@ -801,6 +808,7 @@ const ITEMS = [
     material: "Tencel",
     chips: [["eco","Eco-friendly"]],
     rotate: -3,
+    img: "reformation-floral-dress.jpg",
     swatch: {bg:"#8a9472", stripe:"#a4ae8a", label:"floral midi dress"}
   },
   {
@@ -813,6 +821,7 @@ const ITEMS = [
     material: "Cotton",
     chips: [["eco","Organic cotton"],["lux","Like new"]],
     rotate: 2,
+    img: "ganni-silk-blouse.jpg",
     swatch: {bg:"#d6c088", stripe:"#c2ae78", label:"puff-sleeve blouse"}
   },
   {
@@ -825,6 +834,7 @@ const ITEMS = [
     material: "Denim",
     chips: [["eco","Timeless"]],
     rotate: -2,
+    img: "levis-501.jpg",
     swatch: {bg:"#4a5c74", stripe:"#5c6e88", label:"501 vintage jeans"}
   }
 ];
@@ -866,7 +876,7 @@ function buildCard(item, i){
     <div class="tape t2"></div>
     ${item.badge ? `<div class="badge">${item.badge}</div>` : ''}
     <svg class="heart" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 20 C 4 14, 3 8, 7 6 C 10 4.5, 12 7, 12 9 C 12 7, 14 4.5, 17 6 C 21 8, 20 14, 12 20Z"/></svg>
-    <div class="photo">${placeholderSVG(item.swatch)}</div>
+    <div class="photo">${placeholderSVG(item.swatch)}${item.img ? `<img class="real" src="uploads/products/${item.img}" alt="${item.brand} ${item.name}" onerror="this.remove()">` : ''}</div>
     <div class="card-meta">
       <div class="price">${item.price}</div>
       <div class="brand">${item.brand}</div>

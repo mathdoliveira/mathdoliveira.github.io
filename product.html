@@ -12,7 +12,7 @@
 <meta property="og:site_name" content="re:match">
 <meta property="og:title" content="Acne Studios Vintage Leather Jacket — re:match">
 <meta property="og:description" content="Authenticated pre-loved luxury. Size M. A 94% match for your style.">
-<meta property="og:image" content="https://matheusdoliveira.com/uploads/concept%20webpage.png">
+<meta property="og:image" content="https://matheusdoliveira.com/uploads/social/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -188,7 +188,7 @@
 
     <!-- SELLER -->
     <div class="seller">
-      <div class="seller-av">ML</div>
+      <div class="seller-av">ML<img class="real" src="uploads/people/seller-marie-l.jpg" alt="Marie L., re:match seller" onerror="this.remove()"></div>
       <div class="seller-info" style="flex:1">
         <h5>Marie L. <span class="ver">✓ Verified seller</span></h5>
         <p>Paris · Active today · Joined 2024</p>
@@ -267,10 +267,10 @@
 
 <script>
 const PAL_MAIN = [
-  {bg:"#7c5a3e",stripe:"#5e4430",lbl:"leather jacket · front"},
-  {bg:"#8a6a48",stripe:"#6a4e38",lbl:"leather jacket · back"},
-  {bg:"#6d4e36",stripe:"#4a3624",lbl:"detail · collar"},
-  {bg:"#886548",stripe:"#6e4e34",lbl:"detail · cuff (small scuff)"}
+  {bg:"#7c5a3e",stripe:"#5e4430",lbl:"leather jacket · front", img:"acne-leather-jacket.jpg"},
+  {bg:"#8a6a48",stripe:"#6a4e38",lbl:"leather jacket · back",  img:"acne-leather-jacket-back.jpg"},
+  {bg:"#6d4e36",stripe:"#4a3624",lbl:"detail · collar",        img:"acne-leather-jacket-detail.jpg"},
+  {bg:"#886548",stripe:"#6e4e34",lbl:"detail · cuff (small scuff)", img:"acne-leather-jacket-lining.jpg"}
 ];
 
 function placeholderSVG(p){
@@ -297,7 +297,7 @@ function renderGallery(){
   PAL_MAIN.forEach((p,i)=>{
     const t = document.createElement('div');
     t.className = 'thumb' + (i===active?' on':'');
-    t.innerHTML = placeholderSVG(p);
+    t.innerHTML = placeholderSVG(p) + (p.img ? `<img class="real" src="uploads/products/${p.img}" alt="${p.lbl}" onerror="this.remove()">` : '');
     t.onclick = ()=>{ active = i; renderGallery(); };
     thumbs.appendChild(t);
   });
@@ -308,24 +308,25 @@ function renderGallery(){
   const holder = document.createElement('div');
   holder.className = 'bg-holder';
   holder.style.cssText = 'position:absolute;inset:0;z-index:0';
-  holder.innerHTML = placeholderSVG(PAL_MAIN[active]);
+  const p = PAL_MAIN[active];
+  holder.innerHTML = placeholderSVG(p) + (p.img ? `<img class="real" src="uploads/products/${p.img}" alt="${p.lbl}" onerror="this.remove()">` : '');
   main.prepend(holder);
-  main.querySelector('.photo-caption').textContent = PAL_MAIN[active].lbl;
+  main.querySelector('.photo-caption').textContent = p.lbl;
 }
 renderGallery();
 
 // More like this
 const MORE = [
-  {brand:"Toteme",name:"Double-breasted Coat",price:"€420",score:91,pal:{bg:"#2a3a54",stripe:"#3a4e6c",lbl:"wool coat"}},
-  {brand:"Ganni",name:"Puff-sleeve Blouse",price:"€95",score:88,pal:{bg:"#d6c088",stripe:"#c2ae78",lbl:"silk blouse"}},
-  {brand:"Reformation",name:"Floral Midi Dress",price:"€110",score:82,pal:{bg:"#8a9472",stripe:"#a4ae8a",lbl:"midi dress"}},
-  {brand:"Levi's",name:"501 Original",price:"€70",score:86,pal:{bg:"#4a5c74",stripe:"#5c6e88",lbl:"vintage denim"}}
+  {brand:"Toteme",name:"Double-breasted Coat",price:"€420",score:91,pal:{bg:"#2a3a54",stripe:"#3a4e6c",lbl:"wool coat"},img:"toteme-coat.jpg"},
+  {brand:"Ganni",name:"Puff-sleeve Blouse",price:"€95",score:88,pal:{bg:"#d6c088",stripe:"#c2ae78",lbl:"silk blouse"},img:"ganni-silk-blouse.jpg"},
+  {brand:"Reformation",name:"Floral Midi Dress",price:"€110",score:82,pal:{bg:"#8a9472",stripe:"#a4ae8a",lbl:"midi dress"},img:"reformation-floral-dress.jpg"},
+  {brand:"Levi's",name:"501 Original",price:"€70",score:86,pal:{bg:"#4a5c74",stripe:"#5c6e88",lbl:"vintage denim"},img:"levis-501.jpg"}
 ];
 const moreEl = document.getElementById('more');
 MORE.forEach(m=>{
   const c = document.createElement('div');
   c.className = 'mini-card';
-  c.innerHTML = `<div class="mc-ph">${placeholderSVG(m.pal)}</div>
+  c.innerHTML = `<div class="mc-ph">${placeholderSVG(m.pal)}${m.img ? `<img class="real" src="uploads/products/${m.img}" alt="${m.brand} ${m.name}" onerror="this.remove()">` : ''}</div>
     <div class="mc-meta">
       <div class="mc-brand">${m.brand}</div>
       <div class="mc-name">${m.name}</div>

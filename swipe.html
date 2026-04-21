@@ -12,7 +12,7 @@
 <meta property="og:site_name" content="re:match">
 <meta property="og:title" content="Your daily swipe feed — re:match">
 <meta property="og:description" content="Swipe. Match. Love again.">
-<meta property="og:image" content="https://matheusdoliveira.com/uploads/concept%20webpage.png">
+<meta property="og:image" content="https://matheusdoliveira.com/uploads/social/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -303,22 +303,22 @@ const PALETTES = [
 const ITEMS = [
   {brand:"Acne Studios",name:"Vintage Leather Jacket",price:"€280",size:"M",cond:"Very good",mat:"Leather",score:94,badge:"New match",gold:true,
     why:{b:"Matched because",t:"you love minimal-vintage, follow Acne Studios, and it sits inside your €50–500 budget."},
-    chips:["eco:Low impact","lux:Circular choice"], ph:0},
+    chips:["eco:Low impact","lux:Circular choice"], ph:0, img:"acne-leather-jacket.jpg"},
   {brand:"Toteme",name:"Wool Double-breasted Coat",price:"€420",size:"M",cond:"Like new",mat:"Wool blend",score:91,badge:"Premium pick",
     why:{b:"Matched because",t:"you wear tailored shapes in neutrals and this piece matches 3 saved items."},
-    chips:["lux:Authenticated","eco:Timeless"], ph:6},
+    chips:["lux:Authenticated","eco:Timeless"], ph:6, img:"toteme-coat.jpg"},
   {brand:"Ganni",name:"Puff-sleeve Silk Blouse",price:"€95",size:"M",cond:"New w/ tags",mat:"Silk",score:88,badge:"Trending for you",
     why:{b:"Matched because",t:"Ganni is a favourite and your feed leans cream this week."},
-    chips:["eco:New w/ tags"], ph:3},
+    chips:["eco:New w/ tags"], ph:3, img:"ganni-silk-blouse.jpg"},
   {brand:"Reformation",name:"Floral Midi Dress",price:"€110",size:"M",cond:"Good",mat:"Tencel",score:82,badge:"Style match",
     why:{b:"Matched because",t:"midi silhouettes are your most-saved cut this season."},
-    chips:["eco:Eco-friendly"], ph:2},
+    chips:["eco:Eco-friendly"], ph:2, img:"reformation-floral-dress.jpg"},
   {brand:"Levi's",name:"501 Vintage Original",price:"€70",size:"28",cond:"Good",mat:"Denim",score:86,badge:"Everyday classic",
     why:{b:"Matched because",t:"Levi's is in your brands and vintage denim fits your 'classic core'."},
-    chips:["eco:Timeless"], ph:4},
+    chips:["eco:Timeless"], ph:4, img:"levis-501.jpg"},
   {brand:"Chanel",name:"Timeless Flap Bag",price:"€1,950",size:"·",cond:"Very good",mat:"Lambskin",score:78,badge:"Aspirational",gold:true,
     why:{b:"Matched because",t:"a little above budget, but matches your saved 'investment piece' shortlist."},
-    chips:["lux:Authenticated","lux:Heritage"], ph:1}
+    chips:["lux:Authenticated","lux:Heritage"], ph:1, img:"chanel-flap-bag.jpg"}
 ];
 
 function placeholderSVG(p){
@@ -353,7 +353,7 @@ function buildCard(item, depth){
     <div class="sc-stamp like">LOVE</div>
     <div class="sc-stamp nope">PASS</div>
     <div class="sc-photo">
-      ${placeholderSVG(PALETTES[item.ph])}
+      ${placeholderSVG(PALETTES[item.ph])}${item.img ? `<img class="real" src="uploads/products/${item.img}" alt="${item.brand} ${item.name}" onerror="this.remove()">` : ''}
       <div class="sc-badge ${item.gold?'gold':''}">${item.badge}</div>
       <div class="sc-heart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 20 C 4 14, 3 8, 7 6 C 10 4.5, 12 7, 12 9 C 12 7, 14 4.5, 17 6 C 21 8, 20 14, 12 20Z"/></svg></div>
       <div class="sc-score"><span class="pct">${item.score}%</span><span class="lbl">match</span></div>
@@ -467,7 +467,7 @@ for(let i=0;i<4;i++){
   const item = ITEMS[(i+2)%ITEMS.length];
   const c = document.createElement('div');
   c.className = 'saved-card';
-  c.innerHTML = `<div class="sv-photo ph">${placeholderSVG(p)}</div>
+  c.innerHTML = `<div class="sv-photo ph">${placeholderSVG(p)}${item.img ? `<img class="real" src="uploads/products/${item.img}" alt="${item.brand} ${item.name}" onerror="this.remove()">` : ''}</div>
     <div class="sv-meta"><div class="sv-brand">${item.brand}</div><div class="sv-price">${item.price}</div></div>`;
   saved.appendChild(c);
 }
