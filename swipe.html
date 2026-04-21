@@ -43,11 +43,11 @@
 .stage-head h2{font-family:"DM Serif Display",serif;font-size:36px;margin:0 0 4px;letter-spacing:-.02em}
 .stage-head .count{font-size:12px;color:var(--mute);letter-spacing:.04em}
 
-.deck-wrap{position:relative;width:380px;height:560px}
+.deck-wrap{position:relative;width:380px;height:640px}
 .swipe-card{
   position:absolute;inset:0;background:#fbf8f1;border-radius:4px;
   box-shadow:0 24px 50px -24px rgba(30,35,28,.4), 0 6px 14px -6px rgba(30,35,28,.25);
-  padding:16px;user-select:none;cursor:grab;
+  padding:16px;user-select:none;cursor:grab;overflow:hidden;
   transition:transform .5s cubic-bezier(.2,.7,.2,1), opacity .4s;
 }
 .swipe-card.drag{transition:none;cursor:grabbing}
