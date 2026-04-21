@@ -1,0 +1,459 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>re:match — your daily swipe feed</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&family=Caveat:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="rematch.css">
+<style>
+.feed{display:grid;grid-template-columns:280px 1fr 320px;gap:40px;padding:36px 44px 80px;max-width:1480px;margin:0 auto}
+
+/* LEFT RAIL — filters */
+.rail h3{font-family:"DM Serif Display",serif;font-size:20px;margin:0 0 14px;font-weight:400}
+.rail .grp{margin-bottom:28px;padding-bottom:24px;border-bottom:1px solid var(--line)}
+.rail .grp:last-child{border-bottom:0}
+.rail .lbl{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin-bottom:10px;font-weight:600;display:flex;justify-content:space-between}
+.rail .lbl .edit{color:var(--forest);text-decoration:underline;text-underline-offset:3px;cursor:pointer;text-transform:none;letter-spacing:0;font-weight:500}
+.rail-chips{display:flex;flex-wrap:wrap;gap:6px}
+.rail-chip{font-size:11.5px;padding:5px 11px;border:1px solid var(--line);border-radius:999px;background:#fbf8f1;cursor:pointer;display:inline-flex;align-items:center;gap:4px}
+.rail-chip.on{background:var(--forest);color:var(--paper);border-color:var(--forest)}
+.rail-chip .x{opacity:.5;font-size:10px}
+.rail-stat{display:flex;justify-content:space-between;padding:7px 0;font-size:12px;border-bottom:1px dashed var(--line)}
+.rail-stat:last-child{border-bottom:0}
+.rail-stat .k{color:var(--mute)}
+.rail-stat .v{font-family:"DM Serif Display",serif}
+
+/* CENTER — deck */
+.stage{display:flex;flex-direction:column;align-items:center;padding-top:8px}
+.stage-head{text-align:center;margin-bottom:24px}
+.stage-head .sub{font-family:"Instrument Serif",serif;font-style:italic;color:var(--forest);font-size:18px;margin-bottom:2px}
+.stage-head h2{font-family:"DM Serif Display",serif;font-size:36px;margin:0 0 4px;letter-spacing:-.02em}
+.stage-head .count{font-size:12px;color:var(--mute);letter-spacing:.04em}
+
+.deck-wrap{position:relative;width:380px;height:560px}
+.swipe-card{
+  position:absolute;inset:0;background:#fbf8f1;border-radius:4px;
+  box-shadow:0 24px 50px -24px rgba(30,35,28,.4), 0 6px 14px -6px rgba(30,35,28,.25);
+  padding:16px;user-select:none;cursor:grab;
+  transition:transform .5s cubic-bezier(.2,.7,.2,1), opacity .4s;
+}
+.swipe-card.drag{transition:none;cursor:grabbing}
+.swipe-card.gone{transition:transform .6s cubic-bezier(.4,.1,.3,1), opacity .5s}
+.swipe-card .tape{position:absolute;width:70px;height:18px;background:rgba(212,201,170,.7);mix-blend-mode:multiply}
+.swipe-card .tape.t1{top:-6px;left:50px;transform:rotate(-6deg)}
+.swipe-card .tape.t2{top:-6px;right:50px;transform:rotate(5deg)}
+
+.sc-photo{width:100%;height:380px;border-radius:2px;overflow:hidden;background:#e8e1d2;position:relative}
+.sc-badge{position:absolute;top:14px;left:14px;background:rgba(30,35,28,.85);color:var(--paper);padding:5px 11px;border-radius:999px;font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;backdrop-filter:blur(4px)}
+.sc-badge.gold{background:var(--gold-soft);color:var(--forest-deep)}
+.sc-heart{position:absolute;top:14px;right:14px;width:36px;height:36px;border-radius:50%;background:rgba(251,248,241,.85);display:grid;place-items:center;color:var(--ink);backdrop-filter:blur(4px);cursor:pointer}
+.sc-heart svg{width:16px;height:16px}
+
+.sc-score{position:absolute;bottom:14px;right:14px;background:var(--forest);color:var(--paper);padding:7px 12px;border-radius:999px;font-family:"DM Serif Display",serif;font-size:14px;display:flex;align-items:center;gap:6px}
+.sc-score .pct{font-size:15px}
+.sc-score .lbl{font-family:"Inter Tight";font-size:9.5px;text-transform:uppercase;letter-spacing:.1em;opacity:.75}
+
+.sc-meta{padding:14px 6px 4px;position:relative}
+.sc-meta .brand{font-family:"DM Serif Display",serif;font-size:22px;line-height:1;margin:0 0 4px}
+.sc-meta .name{font-size:13px;color:var(--mute);margin:0 0 12px}
+.sc-meta .price{position:absolute;top:14px;right:6px;font-family:"DM Serif Display",serif;font-size:19px}
+.sc-chips{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:12px}
+.sc-chips .chip{font-size:11px;padding:4px 10px}
+.sc-chips .chip.size{font-weight:600;min-width:28px;justify-content:center}
+
+.why-box{border-top:1px dashed var(--line);padding-top:10px;display:flex;gap:10px;align-items:flex-start}
+.why-box .spark{color:var(--gold);flex-shrink:0;margin-top:2px}
+.why-box .tx{font-size:12px;color:var(--ink-soft);line-height:1.45}
+.why-box .tx b{color:var(--forest);font-weight:600}
+
+/* swipe action overlays on card during drag */
+.sc-stamp{position:absolute;top:30px;font-family:"DM Serif Display",serif;font-size:38px;padding:8px 20px;border:3px solid currentColor;border-radius:8px;letter-spacing:.04em;text-transform:uppercase;opacity:0;transition:opacity .15s;pointer-events:none;z-index:5}
+.sc-stamp.like{right:24px;transform:rotate(12deg);color:var(--forest)}
+.sc-stamp.nope{left:24px;transform:rotate(-12deg);color:var(--clay)}
+.swipe-card.like-show .sc-stamp.like{opacity:1}
+.swipe-card.nope-show .sc-stamp.nope{opacity:1}
+
+/* action buttons */
+.actions{display:flex;gap:18px;margin-top:30px}
+.a-btn{width:62px;height:62px;border-radius:50%;border:1px solid var(--line);background:#fbf8f1;display:grid;place-items:center;cursor:pointer;box-shadow:0 10px 24px -14px rgba(30,35,28,.4);transition:all .15s}
+.a-btn.lg{width:72px;height:72px}
+.a-btn:hover{transform:translateY(-2px)}
+.a-btn svg{width:22px;height:22px}
+.a-btn.x{color:var(--clay)}
+.a-btn.star{color:var(--gold)}
+.a-btn.info{color:var(--ink)}
+.a-btn.heart{color:var(--heart);width:76px;height:76px}
+.a-btn.heart svg{width:28px;height:28px}
+.a-lbl{font-size:10.5px;color:var(--mute);text-align:center;margin-top:8px;letter-spacing:.08em;text-transform:uppercase}
+
+/* RIGHT rail — saved + activity */
+.saved-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px}
+.saved-head h3{font-family:"DM Serif Display",serif;font-size:20px;margin:0;font-weight:400}
+.saved-head .n{font-size:11px;color:var(--mute);letter-spacing:.05em}
+.saved-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:28px}
+.saved-card{background:#fbf8f1;border:1px solid var(--line);border-radius:6px;overflow:hidden;position:relative;aspect-ratio:3/4}
+.saved-card .sv-photo{width:100%;height:70%;overflow:hidden}
+.saved-card .sv-meta{padding:8px 10px}
+.saved-card .sv-brand{font-family:"DM Serif Display",serif;font-size:12px;line-height:1}
+.saved-card .sv-price{font-size:10.5px;color:var(--mute);margin-top:2px}
+
+.match-toast{background:var(--forest);color:var(--paper);border-radius:10px;padding:16px 18px;margin-bottom:20px;position:relative;overflow:hidden}
+.match-toast::before{content:"✦";position:absolute;right:-14px;top:-14px;font-size:80px;color:rgba(255,255,255,.05);font-family:"Instrument Serif",serif}
+.match-toast h4{margin:0 0 4px;font-family:"DM Serif Display",serif;font-size:17px;font-weight:400;line-height:1.1}
+.match-toast p{margin:0;font-size:12px;color:rgba(255,255,255,.65);line-height:1.5}
+.match-toast .row{display:flex;gap:8px;margin-top:12px}
+.match-toast .mini-btn{font-size:11px;padding:6px 12px;border:1px solid rgba(255,255,255,.25);border-radius:999px;background:transparent;color:var(--paper);cursor:pointer}
+.match-toast .mini-btn.solid{background:var(--gold-soft);color:var(--forest-deep);border-color:var(--gold-soft)}
+
+.activity{background:#fbf8f1;border:1px solid var(--line);border-radius:10px;padding:16px}
+.activity h4{margin:0 0 10px;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);font-weight:600}
+.act-row{display:flex;justify-content:space-between;padding:7px 0;font-size:12.5px;border-bottom:1px dashed var(--line)}
+.act-row:last-child{border-bottom:0}
+.act-row .k{color:var(--ink-soft)}
+.act-row .v{font-family:"Instrument Serif",serif;font-style:italic;color:var(--forest)}
+
+/* match modal */
+.modal{position:fixed;inset:0;background:rgba(30,35,28,.6);backdrop-filter:blur(6px);display:none;place-items:center;z-index:200}
+.modal.on{display:grid}
+.modal-inner{background:var(--paper);border-radius:20px;padding:48px 50px;max-width:460px;text-align:center;position:relative;box-shadow:0 40px 80px -30px rgba(0,0,0,.5)}
+.modal-inner h2{font-family:"Caveat",cursive;font-size:72px;color:var(--forest);margin:0 0 10px;line-height:.9}
+.modal-inner p{font-size:15px;color:var(--ink-soft);margin:0 0 24px}
+.modal-close{position:absolute;top:16px;right:20px;cursor:pointer;color:var(--mute);font-size:20px;background:none;border:0}
+.modal-actions{display:flex;gap:10px;justify-content:center}
+
+@media(max-width:1200px){
+  .feed{grid-template-columns:1fr;gap:30px}
+  .rail{display:none}
+}
+</style>
+</head>
+<body>
+
+<nav class="top">
+  <div class="nav-inner">
+    <a href="rematch.html" class="logo"><div class="mark">re:match</div><div class="sub">Fashion you love. Again.</div></a>
+    <div class="navlinks">
+      <a href="rematch.html">Home</a>
+      <a href="swipe.html" class="active">Swipe feed</a>
+      <a href="product.html">Product</a>
+      <a href="sell.html">Sell</a>
+    </div>
+    <div class="nav-cta">
+      <span class="chip">Daily drop · 12 pieces</span>
+      <button class="btn">Eva B.</button>
+    </div>
+  </div>
+</nav>
+
+<div class="feed">
+
+  <!-- LEFT RAIL -->
+  <aside class="rail">
+    <h3>Your filters</h3>
+
+    <div class="grp">
+      <div class="lbl"><span>Style DNA</span><a class="edit">edit</a></div>
+      <div class="rail-chips">
+        <span class="rail-chip on">Minimal <span class="x">×</span></span>
+        <span class="rail-chip on">Vintage <span class="x">×</span></span>
+        <span class="rail-chip on">Tailored <span class="x">×</span></span>
+      </div>
+    </div>
+
+    <div class="grp">
+      <div class="lbl"><span>Size</span><a class="edit">M</a></div>
+      <div class="rail-chips">
+        <span class="rail-chip on">M</span>
+        <span class="rail-chip">S</span>
+        <span class="rail-chip">Oversized OK</span>
+      </div>
+    </div>
+
+    <div class="grp">
+      <div class="lbl"><span>Brands</span><a class="edit">8</a></div>
+      <div class="rail-chips">
+        <span class="rail-chip on">Acne Studios</span>
+        <span class="rail-chip on">Ganni</span>
+        <span class="rail-chip on">Toteme</span>
+        <span class="rail-chip on">Levi's</span>
+        <span class="rail-chip on">+4</span>
+      </div>
+    </div>
+
+    <div class="grp">
+      <div class="lbl"><span>Budget</span><a class="edit">€50 – €500</a></div>
+      <div style="height:3px;background:var(--line);border-radius:2px;position:relative;margin-top:6px">
+        <div style="position:absolute;top:0;bottom:0;left:10%;right:40%;background:var(--forest);border-radius:2px"></div>
+      </div>
+    </div>
+
+    <div class="grp">
+      <div class="lbl"><span>Condition floor</span></div>
+      <div class="rail-chips">
+        <span class="rail-chip on">Like new +</span>
+        <span class="rail-chip on">Very good +</span>
+      </div>
+    </div>
+
+    <div class="grp">
+      <div class="lbl">AI learning</div>
+      <div class="rail-stat"><span class="k">Swipes made</span><span class="v">247</span></div>
+      <div class="rail-stat"><span class="k">Matches saved</span><span class="v">38</span></div>
+      <div class="rail-stat"><span class="k">Profile accuracy</span><span class="v">84%</span></div>
+      <div class="rail-stat"><span class="k">Next drop</span><span class="v">in 14h</span></div>
+    </div>
+  </aside>
+
+  <!-- CENTER DECK -->
+  <section class="stage">
+    <div class="stage-head">
+      <div class="sub">✦ Curated for Eva · Tuesday</div>
+      <h2>Today's <span style="font-family:'Instrument Serif',serif;font-style:italic;color:var(--forest)">daily drop</span></h2>
+      <div class="count"><span id="rem">12</span> of 12 pieces · swipe or tap</div>
+    </div>
+
+    <div class="deck-wrap" id="deck"></div>
+
+    <div class="actions">
+      <div style="text-align:center">
+        <button class="a-btn x" id="btn-x"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 5 L 19 19 M 19 5 L 5 19"/></svg></button>
+        <div class="a-lbl">Pass</div>
+      </div>
+      <div style="text-align:center">
+        <button class="a-btn info" id="btn-info"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="12" cy="12" r="9"/><path d="M12 10 L 12 16 M 12 7 L 12 7.5" stroke-linecap="round"/></svg></button>
+        <div class="a-lbl">Details</div>
+      </div>
+      <div style="text-align:center">
+        <button class="a-btn star" id="btn-star"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 3 L 14.5 9.5 L 21 10 L 16 14.5 L 17.5 21 L 12 17.5 L 6.5 21 L 8 14.5 L 3 10 L 9.5 9.5 Z"/></svg></button>
+        <div class="a-lbl">Save</div>
+      </div>
+      <div style="text-align:center">
+        <button class="a-btn heart" id="btn-heart"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 20 C 4 14, 3 8, 7 6 C 10 4.5, 12 7, 12 9 C 12 7, 14 4.5, 17 6 C 21 8, 20 14, 12 20Z"/></svg></button>
+        <div class="a-lbl">Love</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- RIGHT RAIL -->
+  <aside class="rail">
+    <div class="match-toast">
+      <h4>It's a match ♥</h4>
+      <p>Seller Marie L. has a 4.9★ wardrobe. Message her or check out to secure your vintage Acne jacket.</p>
+      <div class="row">
+        <button class="mini-btn solid">Check out</button>
+        <button class="mini-btn">Message seller</button>
+      </div>
+    </div>
+
+    <div class="saved-head">
+      <h3>Recently saved</h3>
+      <span class="n">38 pieces</span>
+    </div>
+    <div class="saved-grid" id="saved"></div>
+
+    <div class="activity">
+      <h4>This week's activity</h4>
+      <div class="act-row"><span class="k">Silhouettes you liked</span><span class="v">A-line, cropped</span></div>
+      <div class="act-row"><span class="k">Colours trending in your feed</span><span class="v">olive, cream</span></div>
+      <div class="act-row"><span class="k">New brands surfaced</span><span class="v">Cecilie Bahnsen</span></div>
+      <div class="act-row"><span class="k">Avg. match score</span><span class="v">91%</span></div>
+    </div>
+  </aside>
+</div>
+
+<!-- MATCH MODAL -->
+<div class="modal" id="modal">
+  <div class="modal-inner">
+    <button class="modal-close" id="mclose">×</button>
+    <div style="font-family:'Instrument Serif',serif;font-style:italic;color:var(--gold);font-size:18px;margin-bottom:4px">✦ 94% match ✦</div>
+    <h2>It's a<br/>Match!</h2>
+    <p>This Acne Studios leather jacket ticks your minimal-vintage style, size M, and €280 budget.</p>
+    <div class="modal-actions">
+      <a href="product.html" class="btn btn-dark btn-lg">See the piece →</a>
+      <button class="btn btn-lg" id="keep">Keep swiping</button>
+    </div>
+  </div>
+</div>
+
+<script>
+const PALETTES = [
+  {bg:"#7c5a3e",stripe:"#5e4430",lbl:"leather jacket"},
+  {bg:"#1c1a18",stripe:"#2e2a26",lbl:"quilted flap bag"},
+  {bg:"#8a9472",stripe:"#a4ae8a",lbl:"floral midi dress"},
+  {bg:"#d6c088",stripe:"#c2ae78",lbl:"puff-sleeve blouse"},
+  {bg:"#4a5c74",stripe:"#5c6e88",lbl:"vintage 501 jeans"},
+  {bg:"#b87a7a",stripe:"#cc8f8f",lbl:"silk slip dress"},
+  {bg:"#2a3a54",stripe:"#3a4e6c",lbl:"wool tailored coat"},
+  {bg:"#a84d2b",stripe:"#c06240",lbl:"suede crossbody"}
+];
+
+const ITEMS = [
+  {brand:"Acne Studios",name:"Vintage Leather Jacket",price:"€280",size:"M",cond:"Very good",mat:"Leather",score:94,badge:"New match",gold:true,
+    why:{b:"Matched because",t:"you love minimal-vintage, follow Acne Studios, and it sits inside your €50–500 budget."},
+    chips:["eco:Low impact","lux:Circular choice"], ph:0},
+  {brand:"Toteme",name:"Wool Double-breasted Coat",price:"€420",size:"M",cond:"Like new",mat:"Wool blend",score:91,badge:"Premium pick",
+    why:{b:"Matched because",t:"you wear tailored shapes in neutrals and this piece matches 3 saved items."},
+    chips:["lux:Authenticated","eco:Timeless"], ph:6},
+  {brand:"Ganni",name:"Puff-sleeve Silk Blouse",price:"€95",size:"M",cond:"New w/ tags",mat:"Silk",score:88,badge:"Trending for you",
+    why:{b:"Matched because",t:"Ganni is a favourite and your feed leans cream this week."},
+    chips:["eco:New w/ tags"], ph:3},
+  {brand:"Reformation",name:"Floral Midi Dress",price:"€110",size:"M",cond:"Good",mat:"Tencel",score:82,badge:"Style match",
+    why:{b:"Matched because",t:"midi silhouettes are your most-saved cut this season."},
+    chips:["eco:Eco-friendly"], ph:2},
+  {brand:"Levi's",name:"501 Vintage Original",price:"€70",size:"28",cond:"Good",mat:"Denim",score:86,badge:"Everyday classic",
+    why:{b:"Matched because",t:"Levi's is in your brands and vintage denim fits your 'classic core'."},
+    chips:["eco:Timeless"], ph:4},
+  {brand:"Chanel",name:"Timeless Flap Bag",price:"€1,950",size:"·",cond:"Very good",mat:"Lambskin",score:78,badge:"Aspirational",gold:true,
+    why:{b:"Matched because",t:"a little above budget, but matches your saved 'investment piece' shortlist."},
+    chips:["lux:Authenticated","lux:Heritage"], ph:1}
+];
+
+function placeholderSVG(p){
+  const id = "p"+Math.random().toString(36).slice(2,7);
+  return `<svg viewBox="0 0 380 380" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <pattern id="${id}" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <rect width="10" height="10" fill="${p.bg}"/>
+        <line x1="0" y1="0" x2="0" y2="10" stroke="${p.stripe}" stroke-width="1.4" opacity=".8"/>
+      </pattern>
+    </defs>
+    <rect width="380" height="380" fill="${p.bg}"/>
+    <rect width="380" height="380" fill="url(#${id})"/>
+    <text x="50%" y="50%" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="rgba(255,255,255,.55)" letter-spacing="1.5">[ PRODUCT SHOT ]</text>
+    <text x="50%" y="54%" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="9" fill="rgba(255,255,255,.4)" letter-spacing="1">${p.lbl}</text>
+  </svg>`;
+}
+
+const deck = document.getElementById('deck');
+let cursor = 0;
+
+function buildCard(item, depth){
+  const c = document.createElement('div');
+  c.className = 'swipe-card';
+  c.style.transform = `translate(0, ${depth*10}px) scale(${1 - depth*0.03}) rotate(${depth===0?0:(depth%2===0?1.5:-1.5)}deg)`;
+  c.style.zIndex = 10 - depth;
+  c.style.opacity = depth > 2 ? 0 : 1;
+  c.dataset.depth = depth;
+  const chipsHTML = item.chips.map(s=>{const[cls,t]=s.split(':');return `<span class="chip ${cls}">${t}</span>`}).join('');
+  c.innerHTML = `
+    <div class="tape t1"></div><div class="tape t2"></div>
+    <div class="sc-stamp like">LOVE</div>
+    <div class="sc-stamp nope">PASS</div>
+    <div class="sc-photo">
+      ${placeholderSVG(PALETTES[item.ph])}
+      <div class="sc-badge ${item.gold?'gold':''}">${item.badge}</div>
+      <div class="sc-heart"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 20 C 4 14, 3 8, 7 6 C 10 4.5, 12 7, 12 9 C 12 7, 14 4.5, 17 6 C 21 8, 20 14, 12 20Z"/></svg></div>
+      <div class="sc-score"><span class="pct">${item.score}%</span><span class="lbl">match</span></div>
+    </div>
+    <div class="sc-meta">
+      <div class="price">${item.price}</div>
+      <div class="brand">${item.brand}</div>
+      <div class="name">${item.name}</div>
+      <div class="sc-chips">
+        <span class="chip size">${item.size}</span>
+        <span class="chip">${item.cond}</span>
+        <span class="chip">${item.mat}</span>
+        ${chipsHTML}
+      </div>
+      <div class="why-box">
+        <svg class="spark" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2 L 13.5 9.5 L 21 11 L 13.5 12.5 L 12 20 L 10.5 12.5 L 3 11 L 10.5 9.5 Z"/></svg>
+        <div class="tx"><b>${item.why.b}</b> ${item.why.t}</div>
+      </div>
+    </div>
+  `;
+  return c;
+}
+
+function render(){
+  deck.innerHTML = '';
+  for(let i=0;i<Math.min(4, ITEMS.length);i++){
+    const item = ITEMS[(cursor+i)%ITEMS.length];
+    deck.appendChild(buildCard(item, i));
+  }
+  document.getElementById('rem').textContent = Math.max(0, 12 - cursor);
+  attachDrag();
+}
+
+let drag = null;
+function attachDrag(){
+  const top = deck.querySelector('.swipe-card[data-depth="0"]');
+  if(!top) return;
+  const down = (e)=>{
+    const x = e.touches?e.touches[0].clientX:e.clientX;
+    const y = e.touches?e.touches[0].clientY:e.clientY;
+    drag = {sx:x, sy:y, dx:0, el:top};
+    top.classList.add('drag');
+  };
+  const move = (e)=>{
+    if(!drag) return;
+    const x = e.touches?e.touches[0].clientX:e.clientX;
+    const y = e.touches?e.touches[0].clientY:e.clientY;
+    drag.dx = x - drag.sx;
+    const dy = y - drag.sy;
+    const rot = drag.dx * 0.08;
+    top.style.transform = `translate(${drag.dx}px, ${dy*0.3}px) rotate(${rot}deg)`;
+    top.classList.toggle('like-show', drag.dx > 60);
+    top.classList.toggle('nope-show', drag.dx < -60);
+  };
+  const up = ()=>{
+    if(!drag) return;
+    top.classList.remove('drag');
+    if(Math.abs(drag.dx) > 100){
+      flyOut(top, drag.dx > 0 ? 1 : -1);
+    } else {
+      top.style.transform = 'translate(0,0) rotate(0deg) scale(1)';
+      top.classList.remove('like-show','nope-show');
+    }
+    drag = null;
+  };
+  top.addEventListener('mousedown', down);
+  top.addEventListener('touchstart', down, {passive:true});
+  window.addEventListener('mousemove', move);
+  window.addEventListener('touchmove', move, {passive:true});
+  window.addEventListener('mouseup', up);
+  window.addEventListener('touchend', up);
+}
+
+function flyOut(el, dir){
+  el.classList.add('gone');
+  el.style.transform = `translate(${dir*800}px, 100px) rotate(${dir*30}deg)`;
+  el.style.opacity = 0;
+  const matched = dir > 0 && Math.random() > 0.3;
+  setTimeout(()=>{
+    cursor++;
+    render();
+    if(matched){ document.getElementById('modal').classList.add('on'); }
+  }, 400);
+}
+
+document.getElementById('btn-x').onclick = ()=>{const t=deck.querySelector('[data-depth="0"]');if(t)flyOut(t,-1)};
+document.getElementById('btn-heart').onclick = ()=>{const t=deck.querySelector('[data-depth="0"]');if(t)flyOut(t,1)};
+document.getElementById('btn-star').onclick = ()=>{
+  const t=deck.querySelector('[data-depth="0"]');if(!t)return;
+  t.style.transition='transform .25s';
+  t.style.transform='scale(1.03)';
+  setTimeout(()=>t.style.transform='scale(1) rotate(0deg)', 240);
+};
+document.getElementById('btn-info').onclick = ()=>window.location.href='product.html';
+document.getElementById('mclose').onclick = ()=>document.getElementById('modal').classList.remove('on');
+document.getElementById('keep').onclick = ()=>document.getElementById('modal').classList.remove('on');
+
+// Saved grid
+const saved = document.getElementById('saved');
+for(let i=0;i<4;i++){
+  const p = PALETTES[(i+2)%PALETTES.length];
+  const item = ITEMS[(i+2)%ITEMS.length];
+  const c = document.createElement('div');
+  c.className = 'saved-card';
+  c.innerHTML = `<div class="sv-photo ph">${placeholderSVG(p)}</div>
+    <div class="sv-meta"><div class="sv-brand">${item.brand}</div><div class="sv-price">${item.price}</div></div>`;
+  saved.appendChild(c);
+}
+
+render();
+</script>
+</body>
+</html>

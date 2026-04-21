@@ -1,0 +1,328 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>re:match — Acne Studios Vintage Leather Jacket</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&family=Caveat:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="rematch.css">
+<style>
+.pdp{display:grid;grid-template-columns:1.3fr 1fr;gap:64px;padding:36px 44px 60px;max-width:1360px;margin:0 auto}
+
+/* GALLERY */
+.gal{display:grid;grid-template-columns:80px 1fr;gap:16px}
+.thumbs{display:flex;flex-direction:column;gap:10px}
+.thumb{width:80px;height:100px;border-radius:4px;overflow:hidden;cursor:pointer;border:1px solid var(--line);opacity:.7}
+.thumb.on{opacity:1;border-color:var(--forest);border-width:2px}
+.thumb svg{width:100%;height:100%;display:block}
+.main-ph{border-radius:6px;overflow:hidden;position:relative;aspect-ratio:4/5;background:#e8e1d2}
+.main-ph svg{width:100%;height:100%;display:block}
+.auth-stamp{position:absolute;top:20px;left:20px;background:var(--forest);color:var(--paper);padding:8px 14px 8px 12px;border-radius:999px;font-size:11px;letter-spacing:.08em;display:flex;align-items:center;gap:6px;font-weight:500}
+.auth-stamp svg{width:14px;height:14px}
+.score-stamp{position:absolute;top:20px;right:20px;background:var(--paper);border:1px solid var(--line);padding:10px 14px;border-radius:999px;display:flex;align-items:center;gap:8px;box-shadow:var(--shadow)}
+.score-stamp .pct{font-family:"DM Serif Display",serif;font-size:18px;color:var(--forest)}
+.score-stamp .lbl{font-size:10px;letter-spacing:.1em;text-transform:uppercase;color:var(--mute)}
+.photo-caption{position:absolute;bottom:16px;left:16px;font-family:"Caveat",cursive;font-size:18px;color:var(--paper);text-shadow:0 2px 6px rgba(0,0,0,.4)}
+
+/* INFO */
+.info{padding-top:4px}
+.brumb{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin-bottom:18px}
+.brumb a{text-decoration:none}
+.pdp h1{font-family:"DM Serif Display",serif;font-size:40px;margin:0 0 2px;letter-spacing:-.015em;line-height:1}
+.pdp h1 .brand{display:block;font-size:14px;letter-spacing:.14em;text-transform:uppercase;color:var(--forest);font-family:"Inter Tight";font-weight:600;margin-bottom:8px}
+.pdp .subn{font-family:"Instrument Serif",serif;font-style:italic;color:var(--mute);margin:6px 0 0;font-size:17px}
+
+.price-row{display:flex;align-items:baseline;gap:14px;margin:20px 0 8px}
+.price-row .p{font-family:"DM Serif Display",serif;font-size:34px}
+.price-row .was{color:var(--mute);text-decoration:line-through;font-size:16px}
+.price-row .tag{font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--forest);background:#ecefde;padding:4px 10px;border-radius:999px}
+
+.spec{display:grid;grid-template-columns:repeat(2,1fr);gap:0;border-top:1px solid var(--line);border-bottom:1px solid var(--line);margin:24px 0}
+.spec-item{display:flex;justify-content:space-between;padding:14px 0;border-bottom:1px dashed var(--line-soft);font-size:13px}
+.spec-item:nth-last-child(-n+2){border-bottom:0}
+.spec-item:nth-child(odd){padding-right:24px;border-right:1px solid var(--line-soft)}
+.spec-item:nth-child(even){padding-left:24px}
+.spec-item .k{color:var(--mute);letter-spacing:.02em}
+.spec-item .v{font-family:"DM Serif Display",serif;font-size:15px}
+
+.why-card{background:var(--forest);color:var(--paper-warm);border-radius:14px;padding:24px 28px;margin-bottom:20px;position:relative;overflow:hidden}
+.why-card::before{content:"✦";position:absolute;right:-16px;top:-28px;font-size:120px;color:rgba(255,255,255,.05);font-family:"Instrument Serif",serif}
+.why-card .pill{display:inline-flex;align-items:center;gap:6px;background:var(--gold-soft);color:var(--forest-deep);padding:4px 12px;border-radius:999px;font-size:11px;letter-spacing:.08em;text-transform:uppercase;font-weight:600;margin-bottom:14px}
+.why-card h3{font-family:"DM Serif Display",serif;font-size:22px;margin:0 0 14px;font-weight:400}
+.why-card h3 em{font-family:"Instrument Serif",serif;color:var(--gold-soft);font-style:italic}
+.why-list{display:grid;grid-template-columns:1fr 1fr;gap:12px 20px;list-style:none;padding:0;margin:0}
+.why-list li{display:flex;gap:8px;font-size:13px;color:rgba(255,255,255,.8);line-height:1.4}
+.why-list li svg{flex-shrink:0;color:var(--gold-soft);margin-top:2px}
+.why-list li b{color:var(--paper);font-weight:500}
+
+.cta-row{display:flex;gap:10px;margin:24px 0 16px}
+.cta-row .btn{flex:1;justify-content:center;padding:16px 24px;font-size:14px}
+.cta-row .btn-icon{flex:0 0 52px;padding:0;width:52px;height:52px;justify-content:center;align-items:center;display:flex}
+.cta-row .btn-icon svg{width:18px;height:18px}
+
+/* SELLER CARD */
+.seller{background:#fbf8f1;border:1px solid var(--line);border-radius:12px;padding:20px;display:flex;gap:14px;align-items:flex-start;margin-bottom:24px}
+.seller-av{width:48px;height:48px;border-radius:50%;background:linear-gradient(135deg,#8a9472,#5b6b4a);display:grid;place-items:center;color:#fff;font-family:"DM Serif Display",serif;font-size:18px;flex-shrink:0}
+.seller-info h5{margin:0 0 2px;font-size:14px;font-weight:600;display:flex;align-items:center;gap:6px}
+.seller-info .ver{color:var(--forest);font-size:11px;display:inline-flex;align-items:center;gap:3px}
+.seller-info p{margin:0;font-size:12px;color:var(--mute)}
+.seller-stats{display:flex;gap:16px;margin-top:10px;font-size:11px;color:var(--mute)}
+.seller-stats b{color:var(--ink);font-family:"DM Serif Display",serif;font-size:14px;display:block}
+.seller-cta{margin-left:auto;text-align:right}
+
+/* TRUST MINI */
+.trust-mini{display:grid;grid-template-columns:repeat(2,1fr);gap:10px;margin-bottom:24px}
+.tm{display:flex;gap:10px;align-items:center;padding:12px 14px;border:1px solid var(--line);border-radius:10px;background:#fbf8f1}
+.tm svg{color:var(--forest);flex-shrink:0;width:18px;height:18px}
+.tm h6{margin:0;font-size:12.5px;font-weight:600}
+.tm p{margin:0;font-size:11px;color:var(--mute);line-height:1.3}
+
+/* MORE LIKE THIS */
+.more{padding:60px 44px 20px;max-width:1360px;margin:0 auto}
+.more-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:24px}
+.more-head h2{font-family:"DM Serif Display",serif;font-size:32px;margin:0}
+.more-head h2 em{font-family:"Instrument Serif",serif;color:var(--forest);font-style:italic}
+.more-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.mini-card{background:#fbf8f1;border:1px solid var(--line);border-radius:6px;overflow:hidden;cursor:pointer;transition:transform .2s}
+.mini-card:hover{transform:translateY(-3px);box-shadow:var(--shadow)}
+.mini-card .mc-ph{aspect-ratio:3/4;overflow:hidden}
+.mini-card .mc-meta{padding:12px 14px 14px}
+.mini-card .mc-brand{font-family:"DM Serif Display",serif;font-size:15px;line-height:1}
+.mini-card .mc-name{font-size:11.5px;color:var(--mute);margin:2px 0 8px}
+.mini-card .mc-row{display:flex;justify-content:space-between;align-items:center}
+.mini-card .mc-price{font-family:"DM Serif Display",serif;font-size:14px}
+.mini-card .mc-score{font-size:10px;color:var(--forest);background:#ecefde;padding:2px 8px;border-radius:999px;letter-spacing:.04em}
+
+@media(max-width:1000px){.pdp{grid-template-columns:1fr}.more-grid{grid-template-columns:repeat(2,1fr)}}
+</style>
+</head>
+<body>
+
+<nav class="top">
+  <div class="nav-inner">
+    <a href="rematch.html" class="logo"><div class="mark">re:match</div><div class="sub">Fashion you love. Again.</div></a>
+    <div class="navlinks">
+      <a href="rematch.html">Home</a>
+      <a href="swipe.html">Swipe feed</a>
+      <a href="product.html" class="active">Product</a>
+      <a href="sell.html">Sell</a>
+    </div>
+    <div class="nav-cta">
+      <a href="swipe.html" class="btn">← Back to feed</a>
+    </div>
+  </div>
+</nav>
+
+<main>
+<div class="pdp">
+
+  <!-- GALLERY -->
+  <div class="gal">
+    <div class="thumbs" id="thumbs"></div>
+    <div class="main-ph" id="main">
+      <div class="auth-stamp">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 3 L 20 6 V 12 C 20 17, 16 20, 12 21 C 8 20, 4 17, 4 12 V 6 Z"/><path d="M9 12 L 11.5 14.5 L 16 10"/></svg>
+        Authenticated by re:match
+      </div>
+      <div class="score-stamp">
+        <span class="pct">94%</span><span class="lbl">match</span>
+      </div>
+      <div class="photo-caption">front · Marie L.'s studio</div>
+    </div>
+  </div>
+
+  <!-- INFO -->
+  <div class="info">
+    <div class="brumb"><a>Shop</a> / <a>Jackets</a> / <b style="color:var(--ink)">Vintage leather</b></div>
+    <h1><span class="brand">Acne Studios</span>Vintage Leather Jacket</h1>
+    <p class="subn">Biker cut, patinated lamb leather, c. 2018 collection.</p>
+
+    <div class="price-row">
+      <span class="p">€280</span>
+      <span class="was">retail €950</span>
+      <span class="tag">71% off retail</span>
+    </div>
+    <p class="mono" style="color:var(--forest)">Held in 3 other wardrobes this week</p>
+
+    <div class="spec">
+      <div class="spec-item"><span class="k">Size</span><span class="v">M · EU 38</span></div>
+      <div class="spec-item"><span class="k">Condition</span><span class="v">Very good</span></div>
+      <div class="spec-item"><span class="k">Material</span><span class="v">Lamb leather</span></div>
+      <div class="spec-item"><span class="k">Colour</span><span class="v">Cognac</span></div>
+      <div class="spec-item"><span class="k">Era</span><span class="v">2018 collection</span></div>
+      <div class="spec-item"><span class="k">Location</span><span class="v">Paris, FR</span></div>
+    </div>
+
+    <!-- WHY THIS MATCHED -->
+    <div class="why-card">
+      <span class="pill">✦ Why this matched you</span>
+      <h3>Your <em>minimal-vintage</em> profile,<br/>scored on six signals.</h3>
+      <ul class="why-list">
+        <li><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="6"/></svg><div><b>Style fit 96%</b><br/>Matches your saved 'minimal-vintage' DNA.</div></li>
+        <li><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="6"/></svg><div><b>Brand fit 100%</b><br/>Acne Studios is a favourite.</div></li>
+        <li><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="6"/></svg><div><b>Size fit 100%</b><br/>Your M, runs true.</div></li>
+        <li><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="6"/></svg><div><b>Colour fit 88%</b><br/>Warm cognac pairs with your cream/forest palette.</div></li>
+        <li><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="6"/></svg><div><b>Budget fit 100%</b><br/>Inside your €50 – €500 range.</div></li>
+        <li><svg width="12" height="12" viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="12" r="6"/></svg><div><b>Condition fit 92%</b><br/>'Very good' meets your condition floor.</div></li>
+      </ul>
+    </div>
+
+    <div class="cta-row">
+      <button class="btn btn-dark btn-lg">Buy now · €280</button>
+      <button class="btn btn-lg">Message seller</button>
+      <button class="btn btn-icon" title="Save"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 3 L 14.5 9.5 L 21 10 L 16 14.5 L 17.5 21 L 12 17.5 L 6.5 21 L 8 14.5 L 3 10 L 9.5 9.5 Z"/></svg></button>
+      <button class="btn btn-icon" title="Share"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8 11 L 16 7 M 8 13 L 16 17"/></svg></button>
+    </div>
+
+    <!-- SELLER -->
+    <div class="seller">
+      <div class="seller-av">ML</div>
+      <div class="seller-info" style="flex:1">
+        <h5>Marie L. <span class="ver">✓ Verified seller</span></h5>
+        <p>Paris · Active today · Joined 2024</p>
+        <div class="seller-stats">
+          <div><b>4.9★</b>Wardrobe rating</div>
+          <div><b>42</b>Pieces listed</div>
+          <div><b>~4h</b>Response time</div>
+        </div>
+      </div>
+      <div class="seller-cta"><button class="btn" style="padding:7px 14px;font-size:12px">View wardrobe</button></div>
+    </div>
+
+    <!-- TRUST -->
+    <div class="trust-mini">
+      <div class="tm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round"><path d="M12 3 L 20 6 V 12 C 20 17, 16 20, 12 21 C 8 20, 4 17, 4 12 V 6 Z"/><path d="M9 12 L 11.5 14.5 L 16 10"/></svg>
+        <div><h6>Authenticated piece</h6><p>Inspected in Paris · 12 Apr</p></div>
+      </div>
+      <div class="tm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><rect x="4" y="8" width="16" height="12" rx="2"/><path d="M8 8 V 6 A 4 4 0 0 1 16 6 V 8"/></svg>
+        <div><h6>Escrow payment</h6><p>Funds held until delivery</p></div>
+      </div>
+      <div class="tm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4"><path d="M4 12 A 8 8 0 0 1 20 8 M 20 4 L 20 8 L 16 8" stroke-linecap="round"/><path d="M20 12 A 8 8 0 0 1 4 16 M 4 20 L 4 16 L 8 16" stroke-linecap="round"/></svg>
+        <div><h6>14-day returns</h6><p>If it's not right for you</p></div>
+      </div>
+      <div class="tm"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.4" stroke-linecap="round"><path d="M3 7 L 12 3 L 21 7 L 12 11 Z M 3 7 V 17 L 12 21 L 21 17 V 7"/></svg>
+        <div><h6>Free EU shipping</h6><p>Carbon-neutral courier</p></div>
+      </div>
+    </div>
+
+    <details style="border-top:1px solid var(--line);padding:18px 0">
+      <summary style="cursor:pointer;font-family:'DM Serif Display',serif;font-size:17px;list-style:none">Description &amp; story from the seller</summary>
+      <p style="font-size:13.5px;color:var(--ink-soft);line-height:1.6;margin:12px 0 0;max-width:500px">A jacket I wore through three Paris winters — bought at the Boulevard Saint-Germain boutique in 2019, worn maybe 20 times. Leather has softened beautifully. Small scuff on the left cuff (see photo 4). Selling because I've moved to warmer climates. Hope it finds someone who'll love it into its next chapter.</p>
+    </details>
+  </div>
+</div>
+
+<!-- MORE LIKE THIS -->
+<section class="more">
+  <div class="more-head">
+    <h2>More like this in <em>your profile</em></h2>
+    <a class="mono" style="color:var(--forest)">View all →</a>
+  </div>
+  <div class="more-grid" id="more"></div>
+</section>
+
+<!-- CIRCULAR IMPACT -->
+<section class="more" style="padding-top:0;padding-bottom:60px">
+  <div class="more-head">
+    <h2>The story <em>this piece saves</em></h2>
+    <span class="mono" style="color:var(--mute)">per item · avg.</span>
+  </div>
+  <div style="display:grid;grid-template-columns:repeat(4,1fr);gap:18px">
+    <div style="background:var(--forest);color:var(--paper-warm);border-radius:10px;padding:22px 24px">
+      <div class="mono" style="color:var(--gold-soft);margin-bottom:6px">CO₂ saved</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:32px;line-height:1">24.3 kg</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.6);margin-top:6px">≈ a flight Paris → London</div>
+    </div>
+    <div style="background:#fbf8f1;border:1px solid var(--line);border-radius:10px;padding:22px 24px">
+      <div class="mono" style="color:var(--forest);margin-bottom:6px">Water spared</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:32px;line-height:1">2,840 L</div>
+      <div style="font-size:12px;color:var(--mute);margin-top:6px">vs. virgin lamb leather</div>
+    </div>
+    <div style="background:#fbf8f1;border:1px solid var(--line);border-radius:10px;padding:22px 24px">
+      <div class="mono" style="color:var(--forest);margin-bottom:6px">Previous lives</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:32px;line-height:1">2 owners</div>
+      <div style="font-size:12px;color:var(--mute);margin-top:6px">since 2018</div>
+    </div>
+    <div style="background:#fbf8f1;border:1px solid var(--line);border-radius:10px;padding:22px 24px">
+      <div class="mono" style="color:var(--forest);margin-bottom:6px">Est. years left</div>
+      <div style="font-family:'DM Serif Display',serif;font-size:32px;line-height:1">10+ yrs</div>
+      <div style="font-size:12px;color:var(--mute);margin-top:6px">with proper care</div>
+    </div>
+  </div>
+</section>
+
+</main>
+
+<script>
+const PAL_MAIN = [
+  {bg:"#7c5a3e",stripe:"#5e4430",lbl:"leather jacket · front"},
+  {bg:"#8a6a48",stripe:"#6a4e38",lbl:"leather jacket · back"},
+  {bg:"#6d4e36",stripe:"#4a3624",lbl:"detail · collar"},
+  {bg:"#886548",stripe:"#6e4e34",lbl:"detail · cuff (small scuff)"}
+];
+
+function placeholderSVG(p){
+  const id = "x"+Math.random().toString(36).slice(2,7);
+  return `<svg viewBox="0 0 400 500" xmlns="http://www.w3.org/2000/svg" preserveAspectRatio="xMidYMid slice">
+    <defs>
+      <pattern id="${id}" width="10" height="10" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+        <rect width="10" height="10" fill="${p.bg}"/>
+        <line x1="0" y1="0" x2="0" y2="10" stroke="${p.stripe}" stroke-width="1.4" opacity=".8"/>
+      </pattern>
+    </defs>
+    <rect width="400" height="500" fill="${p.bg}"/>
+    <rect width="400" height="500" fill="url(#${id})"/>
+    <text x="50%" y="50%" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="11" fill="rgba(255,255,255,.55)" letter-spacing="1.5">[ PRODUCT SHOT ]</text>
+    <text x="50%" y="54%" text-anchor="middle" font-family="JetBrains Mono, monospace" font-size="9" fill="rgba(255,255,255,.4)" letter-spacing="1">${p.lbl}</text>
+  </svg>`;
+}
+
+const thumbs = document.getElementById('thumbs');
+const main = document.getElementById('main');
+let active = 0;
+function renderGallery(){
+  thumbs.innerHTML = '';
+  PAL_MAIN.forEach((p,i)=>{
+    const t = document.createElement('div');
+    t.className = 'thumb' + (i===active?' on':'');
+    t.innerHTML = placeholderSVG(p);
+    t.onclick = ()=>{ active = i; renderGallery(); };
+    thumbs.appendChild(t);
+  });
+  // replace main image container's svg; keep overlays
+  main.querySelectorAll('svg.bg-img').forEach(el=>el.remove());
+  const ph = main.querySelector('.bg-holder');
+  if(ph) ph.remove();
+  const holder = document.createElement('div');
+  holder.className = 'bg-holder';
+  holder.style.cssText = 'position:absolute;inset:0;z-index:0';
+  holder.innerHTML = placeholderSVG(PAL_MAIN[active]);
+  main.prepend(holder);
+  main.querySelector('.photo-caption').textContent = PAL_MAIN[active].lbl;
+}
+renderGallery();
+
+// More like this
+const MORE = [
+  {brand:"Toteme",name:"Double-breasted Coat",price:"€420",score:91,pal:{bg:"#2a3a54",stripe:"#3a4e6c",lbl:"wool coat"}},
+  {brand:"Ganni",name:"Puff-sleeve Blouse",price:"€95",score:88,pal:{bg:"#d6c088",stripe:"#c2ae78",lbl:"silk blouse"}},
+  {brand:"Reformation",name:"Floral Midi Dress",price:"€110",score:82,pal:{bg:"#8a9472",stripe:"#a4ae8a",lbl:"midi dress"}},
+  {brand:"Levi's",name:"501 Original",price:"€70",score:86,pal:{bg:"#4a5c74",stripe:"#5c6e88",lbl:"vintage denim"}}
+];
+const moreEl = document.getElementById('more');
+MORE.forEach(m=>{
+  const c = document.createElement('div');
+  c.className = 'mini-card';
+  c.innerHTML = `<div class="mc-ph">${placeholderSVG(m.pal)}</div>
+    <div class="mc-meta">
+      <div class="mc-brand">${m.brand}</div>
+      <div class="mc-name">${m.name}</div>
+      <div class="mc-row"><span class="mc-price">${m.price}</span><span class="mc-score">${m.score}% match</span></div>
+    </div>`;
+  moreEl.appendChild(c);
+});
+</script>
+</body>
+</html>

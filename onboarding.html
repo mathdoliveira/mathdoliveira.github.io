@@ -1,0 +1,443 @@
+<!doctype html>
+<html lang="en">
+<head>
+<title>re:match — build your style profile</title>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width,initial-scale=1" />
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&family=Caveat:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="rematch.css">
+<style>
+.ob-shell{min-height:calc(100vh - 80px);display:grid;grid-template-columns:340px 1fr;gap:0}
+.ob-left{background:var(--forest);color:var(--paper-warm);padding:50px 44px;position:relative;overflow:hidden}
+.ob-left::before{content:"";position:absolute;right:-120px;bottom:-120px;width:360px;height:360px;border:1px solid rgba(255,255,255,.08);border-radius:50%}
+.ob-left::after{content:"";position:absolute;right:-60px;bottom:-60px;width:260px;height:260px;border:1px solid rgba(255,255,255,.06);border-radius:50%}
+.ob-left .logo{color:var(--paper)}
+.ob-left .logo .sub{color:rgba(255,255,255,.5)}
+.ob-title{font-family:"DM Serif Display",serif;font-size:36px;line-height:1.05;letter-spacing:-.02em;margin:60px 0 14px}
+.ob-title .em{font-family:"Instrument Serif",serif;font-style:italic;color:var(--gold-soft)}
+.ob-lede{font-size:14px;color:rgba(255,255,255,.65);max-width:260px;line-height:1.55;margin:0 0 40px}
+
+.steps{list-style:none;padding:0;margin:0;position:relative;z-index:1}
+.steps li{display:flex;gap:14px;padding:14px 0;border-bottom:1px dashed rgba(255,255,255,.12);align-items:center;font-size:13px;color:rgba(255,255,255,.5)}
+.steps li .n{width:26px;height:26px;border:1px solid rgba(255,255,255,.25);border-radius:50%;display:grid;place-items:center;font-family:"Instrument Serif",serif;font-style:italic;font-size:15px;flex-shrink:0}
+.steps li.on{color:var(--paper-warm)}
+.steps li.on .n{background:var(--gold-soft);color:var(--forest-deep);border-color:var(--gold-soft)}
+.steps li.done{color:rgba(255,255,255,.4)}
+.steps li.done .n{background:rgba(255,255,255,.15);color:var(--paper-warm);border-color:transparent}
+.steps li.done .n::before{content:"✓"}
+.steps li.done .n .lbl{display:none}
+
+.ai-note{position:absolute;bottom:44px;left:44px;right:44px;font-family:"Instrument Serif",serif;font-style:italic;font-size:14px;color:rgba(255,255,255,.55);line-height:1.45;border-top:1px solid rgba(255,255,255,.12);padding-top:22px}
+.ai-note::before{content:"✦";color:var(--gold-soft);margin-right:6px;font-style:normal}
+
+/* right panel */
+.ob-right{padding:60px 80px;display:flex;flex-direction:column;min-height:0}
+.ob-crumbs{display:flex;justify-content:space-between;margin-bottom:30px;font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute)}
+.ob-crumbs .pct{color:var(--forest);font-weight:600}
+.progress{height:2px;background:var(--line);margin-bottom:44px;position:relative}
+.progress-fill{position:absolute;top:0;bottom:0;left:0;background:var(--forest);width:50%;transition:width .4s}
+
+.step-head h2{font-family:"DM Serif Display",serif;font-size:44px;line-height:1;letter-spacing:-.02em;margin:0 0 10px}
+.step-head h2 .em{font-family:"Instrument Serif",serif;font-style:italic;color:var(--forest)}
+.step-head p{margin:0 0 36px;font-size:15px;color:var(--mute);max-width:520px}
+
+.pill-grid{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:40px}
+.pill{padding:11px 20px;border:1px solid var(--line);border-radius:999px;background:#fbf8f1;cursor:pointer;font-size:14px;transition:all .18s;display:inline-flex;align-items:center;gap:8px}
+.pill:hover{border-color:var(--ink)}
+.pill.on{background:var(--forest);color:var(--paper);border-color:var(--forest)}
+.pill .sub{font-family:"Instrument Serif",serif;font-style:italic;color:var(--mute);font-size:13px}
+.pill.on .sub{color:rgba(255,255,255,.6)}
+.pill .check{width:16px;height:16px;border-radius:50%;border:1px solid var(--line);display:inline-grid;place-items:center;font-size:10px}
+.pill.on .check{background:var(--gold-soft);border-color:var(--gold-soft);color:var(--forest-deep)}
+.pill.on .check::before{content:"✓"}
+
+.size-row{display:flex;gap:10px;flex-wrap:wrap}
+.size-btn{width:56px;height:56px;border:1px solid var(--line);background:#fbf8f1;border-radius:50%;font-family:"DM Serif Display",serif;font-size:16px;cursor:pointer;transition:all .15s}
+.size-btn.on{background:var(--forest);color:var(--paper);border-color:var(--forest)}
+
+.budget-wrap{background:#fbf8f1;border:1px solid var(--line);border-radius:14px;padding:26px 30px;max-width:560px;margin-bottom:40px}
+.budget-head{display:flex;justify-content:space-between;margin-bottom:20px}
+.budget-head .v{font-family:"DM Serif Display",serif;font-size:24px}
+.budget-head .v .sub{font-size:13px;color:var(--mute);font-family:"Inter Tight";margin-left:6px}
+.slider-track{height:3px;background:var(--line);border-radius:2px;position:relative}
+.slider-fill{position:absolute;top:0;bottom:0;background:var(--forest);border-radius:2px}
+.slider-knob{position:absolute;top:50%;transform:translate(-50%,-50%);width:18px;height:18px;background:#fbf8f1;border:2px solid var(--forest);border-radius:50%;cursor:grab}
+.slider-range{display:flex;justify-content:space-between;font-size:11px;color:var(--mute);margin-top:12px;letter-spacing:.05em}
+
+.swatch-grid{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:40px}
+.sw{width:56px;height:56px;border-radius:50%;cursor:pointer;position:relative;border:2px solid transparent;transition:transform .15s}
+.sw:hover{transform:scale(1.06)}
+.sw.on{border-color:var(--ink)}
+.sw.on::after{content:"✓";position:absolute;inset:0;display:grid;place-items:center;color:#fff;font-size:14px;text-shadow:0 1px 2px rgba(0,0,0,.5)}
+.sw-lbl{font-size:10.5px;color:var(--mute);text-align:center;margin-top:6px;letter-spacing:.02em}
+
+.brand-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:12px;margin-bottom:40px;max-width:680px}
+.brand-card{border:1px solid var(--line);border-radius:10px;padding:18px;cursor:pointer;background:#fbf8f1;transition:all .18s}
+.brand-card:hover{border-color:var(--ink)}
+.brand-card.on{background:var(--forest);color:var(--paper);border-color:var(--forest)}
+.brand-card h4{font-family:"DM Serif Display",serif;font-size:18px;margin:0 0 4px;font-weight:400}
+.brand-card p{margin:0;font-size:11.5px;color:var(--mute);letter-spacing:.01em}
+.brand-card.on p{color:rgba(255,255,255,.5)}
+
+.nav-row{display:flex;justify-content:space-between;align-items:center;margin-top:auto;padding-top:40px}
+.nav-row .skip{color:var(--mute);text-decoration:underline;text-underline-offset:3px;font-size:13px;cursor:pointer}
+
+/* Completion screen */
+.done-screen{text-align:center;padding:40px 0;max-width:600px;margin:0 auto}
+.done-screen .burst{font-family:"Instrument Serif",serif;font-style:italic;color:var(--gold);font-size:22px;margin-bottom:12px}
+.done-screen h2{font-family:"DM Serif Display",serif;font-size:58px;line-height:.95;letter-spacing:-.02em;margin:0 0 18px}
+.done-screen h2 .em{font-family:"Instrument Serif",serif;font-style:italic;color:var(--forest)}
+.done-screen .lede{font-size:16px;color:var(--ink-soft);margin-bottom:36px;max-width:420px;margin-left:auto;margin-right:auto}
+.profile-summary{background:#fbf8f1;border:1px solid var(--line);border-radius:14px;padding:28px 32px;text-align:left;margin-bottom:36px;display:grid;grid-template-columns:1fr 1fr;gap:20px 30px}
+.ps-item .lbl{font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--mute);margin-bottom:6px}
+.ps-item .v{font-family:"DM Serif Display",serif;font-size:17px}
+.ps-item .chips{display:flex;gap:6px;flex-wrap:wrap;margin-top:4px}
+.ps-item .chips .chip{font-size:11px}
+
+@media(max-width:900px){
+  .ob-shell{grid-template-columns:1fr}
+  .ob-left{display:none}
+  .ob-right{padding:40px 24px}
+  .brand-grid{grid-template-columns:1fr}
+}
+</style>
+</head>
+<body>
+
+<nav class="top">
+  <div class="nav-inner">
+    <a href="rematch.html" class="logo"><div class="mark">re:match</div><div class="sub">Fashion you love. Again.</div></a>
+    <div class="navlinks">
+      <a href="rematch.html">Home</a>
+      <a href="swipe.html">Swipe feed</a>
+      <a href="product.html">Product</a>
+      <a href="sell.html">Sell</a>
+    </div>
+    <div class="nav-cta"><span class="chip">Step 02 of 04</span></div>
+  </div>
+</nav>
+
+<div class="ob-shell">
+  <aside class="ob-left">
+    <a href="rematch.html" class="logo"><div class="mark">re:match</div><div class="sub">Fashion you love. Again.</div></a>
+    <h2 class="ob-title">Let's find what you <span class="em">truly love.</span></h2>
+    <p class="ob-lede">A ~90-second profile. The more you tell us, the better your matches get. You can change anything, anytime.</p>
+
+    <ol class="steps" id="steps">
+      <li data-s="1" class="done"><span class="n"><span class="lbl">1</span></span> Welcome</li>
+      <li data-s="2" class="on"><span class="n">2</span> Your style</li>
+      <li data-s="3"><span class="n">3</span> Size &amp; fit</li>
+      <li data-s="4"><span class="n">4</span> Brands &amp; budget</li>
+      <li data-s="5"><span class="n">5</span> Colours &amp; condition</li>
+      <li data-s="6"><span class="n">6</span> Ready to match</li>
+    </ol>
+
+    <p class="ai-note">Our AI uses your answers plus every swipe to learn your real taste. It improves quietly, in the background.</p>
+  </aside>
+
+  <main class="ob-right" id="main">
+    <div class="ob-crumbs"><span id="crumb">Step 2 of 6 · Your style</span><span class="pct" id="pct">33%</span></div>
+    <div class="progress"><div class="progress-fill" id="fill" style="width:33%"></div></div>
+
+    <div id="screen"></div>
+
+    <div class="nav-row">
+      <span class="skip" id="back">← Back</span>
+      <button class="btn btn-dark btn-lg" id="next">Continue →</button>
+    </div>
+  </main>
+</div>
+
+<script>
+const STYLES = [
+  {id:"minimal",label:"Minimal",sub:"quiet & clean"},
+  {id:"vintage",label:"Vintage",sub:"stories & patina"},
+  {id:"tailored",label:"Tailored",sub:"sharp lines"},
+  {id:"streetwear",label:"Streetwear",sub:"relaxed edge"},
+  {id:"romantic",label:"Romantic",sub:"soft & flowing"},
+  {id:"classic",label:"Classic",sub:"timeless core"},
+  {id:"edgy",label:"Edgy",sub:"leather & contrast"},
+  {id:"luxury",label:"Luxury",sub:"designer forward"}
+];
+const SIZES = ["XS","S","M","L","XL","XXL"];
+const COLORS = [
+  {id:"black",c:"#1e2620",lbl:"Ink"},
+  {id:"cream",c:"#e8dfcc",lbl:"Cream"},
+  {id:"sand",c:"#d6c9a6",lbl:"Sand"},
+  {id:"forest",c:"#5b6b4a",lbl:"Forest"},
+  {id:"clay",c:"#a84d2b",lbl:"Clay"},
+  {id:"navy",c:"#2a3a54",lbl:"Navy"},
+  {id:"rose",c:"#b87a7a",lbl:"Rose"},
+  {id:"gold",c:"#b08a4a",lbl:"Gold"}
+];
+const BRANDS = [
+  {id:"acne",name:"Acne Studios",cat:"Scandi minimal"},
+  {id:"ganni",name:"Ganni",cat:"Playful Copenhagen"},
+  {id:"levis",name:"Levi's",cat:"Denim classic"},
+  {id:"arket",name:"Arket",cat:"Quiet luxury"},
+  {id:"toteme",name:"Toteme",cat:"Elevated basics"},
+  {id:"chanel",name:"Chanel",cat:"Heritage luxury"},
+  {id:"prada",name:"Prada",cat:"Conceptual luxury"},
+  {id:"maison",name:"Margiela",cat:"Avant-garde"},
+  {id:"cos",name:"COS",cat:"Architectural"}
+];
+const CONDITIONS = [
+  {id:"new",label:"New with tags",sub:"never worn"},
+  {id:"likenew",label:"Like new",sub:"pristine"},
+  {id:"verygood",label:"Very good",sub:"barely worn"},
+  {id:"good",label:"Good",sub:"lovingly used"},
+  {id:"fair",label:"Fair",sub:"character marks"}
+];
+
+const state = {
+  step: 2,
+  total: 6,
+  styles: new Set(["minimal","vintage"]),
+  size: "M",
+  brands: new Set(["acne","ganni","levis"]),
+  budget: [50, 500],
+  colors: new Set(["black","cream","forest"]),
+  conditions: new Set(["likenew","verygood","good"])
+};
+
+const screen = document.getElementById('screen');
+
+function render(){
+  // progress
+  document.getElementById('fill').style.width = (state.step/state.total*100)+"%";
+  document.getElementById('pct').textContent = Math.round(state.step/state.total*100)+"%";
+  const labels = ["","Welcome","Your style","Size & fit","Brands & budget","Colours & condition","Ready to match"];
+  document.getElementById('crumb').textContent = `Step ${state.step} of ${state.total} · ${labels[state.step]}`;
+  // steps list
+  document.querySelectorAll('#steps li').forEach(li=>{
+    const s = +li.dataset.s;
+    li.className = s < state.step ? 'done' : s === state.step ? 'on' : '';
+  });
+  // next button label
+  document.getElementById('next').textContent = state.step === state.total ? "See my matches →" : "Continue →";
+
+  if(state.step === 1) return renderWelcome();
+  if(state.step === 2) return renderStyles();
+  if(state.step === 3) return renderSize();
+  if(state.step === 4) return renderBrandsBudget();
+  if(state.step === 5) return renderColors();
+  if(state.step === 6) return renderDone();
+}
+
+function renderWelcome(){
+  screen.innerHTML = `
+    <div class="step-head">
+      <h2>Welcome to <span class="em">re:match.</span></h2>
+      <p>Before you swipe, teach our AI the shape of your taste. We'll use it to curate a small, considered feed — never an endless scroll.</p>
+    </div>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:16px;max-width:680px;margin-bottom:30px">
+      ${[
+        ["01","You answer 5 quick questions"],
+        ["02","We build a living style profile"],
+        ["03","You start matching with pieces"]
+      ].map(([n,t])=>`<div style="border:1px solid var(--line);border-radius:10px;padding:20px;background:#fbf8f1">
+        <div class="mono" style="color:var(--forest);margin-bottom:10px">${n}</div>
+        <div style="font-family:'DM Serif Display',serif;font-size:17px;line-height:1.2">${t}</div>
+      </div>`).join('')}
+    </div>
+  `;
+}
+
+function renderStyles(){
+  screen.innerHTML = `
+    <div class="step-head">
+      <h2>Which feel <span class="em">most like you?</span></h2>
+      <p>Pick 2 or more. These set the tone for everything we show you.</p>
+    </div>
+    <div class="pill-grid">
+      ${STYLES.map(s=>`<div class="pill ${state.styles.has(s.id)?'on':''}" data-s="${s.id}">
+        <span>${s.label}</span><span class="sub">${s.sub}</span>
+        <span class="check"></span>
+      </div>`).join('')}
+    </div>
+    <p class="mono" style="color:var(--forest)">${state.styles.size} selected</p>
+  `;
+  screen.querySelectorAll('.pill').forEach(p=>{
+    p.onclick = ()=>{
+      const id = p.dataset.s;
+      if(state.styles.has(id)) state.styles.delete(id); else state.styles.add(id);
+      render();
+    };
+  });
+}
+
+function renderSize(){
+  screen.innerHTML = `
+    <div class="step-head">
+      <h2>What's your <span class="em">size?</span></h2>
+      <p>We'll prioritise pieces that will actually fit. You can add fit preferences later.</p>
+    </div>
+    <div class="size-row">
+      ${SIZES.map(s=>`<button class="size-btn ${state.size===s?'on':''}" data-s="${s}">${s}</button>`).join('')}
+    </div>
+    <div style="margin-top:40px;padding:20px 24px;background:#fbf8f1;border:1px solid var(--line);border-radius:12px;max-width:540px">
+      <div class="mono" style="color:var(--forest);margin-bottom:8px">Fit notes (optional)</div>
+      <div style="display:flex;gap:8px;flex-wrap:wrap">
+        ${["Runs roomy","True to size","Fitted","Cropped OK","Oversized lover"].map(t=>`<span class="chip">${t}</span>`).join('')}
+      </div>
+    </div>
+  `;
+  screen.querySelectorAll('.size-btn').forEach(b=>{
+    b.onclick = ()=>{ state.size = b.dataset.s; render(); };
+  });
+}
+
+function renderBrandsBudget(){
+  screen.innerHTML = `
+    <div class="step-head">
+      <h2>Your favourite <span class="em">brands.</span></h2>
+      <p>Pick the houses you already love. We'll find pieces from these and others that share their DNA.</p>
+    </div>
+    <div class="brand-grid">
+      ${BRANDS.map(b=>`<div class="brand-card ${state.brands.has(b.id)?'on':''}" data-b="${b.id}">
+        <h4>${b.name}</h4><p>${b.cat}</p>
+      </div>`).join('')}
+    </div>
+    <div class="step-head" style="margin-top:20px">
+      <h2 style="font-size:32px">And your <span class="em">budget.</span></h2>
+    </div>
+    <div class="budget-wrap">
+      <div class="budget-head">
+        <div class="v">€${state.budget[0]}<span class="sub">min</span></div>
+        <div class="v">€${state.budget[1]}${state.budget[1]===1000?"+":""}<span class="sub">max</span></div>
+      </div>
+      <div class="slider-track" id="track">
+        <div class="slider-fill" id="sfill"></div>
+        <div class="slider-knob" id="k1"></div>
+        <div class="slider-knob" id="k2"></div>
+      </div>
+      <div class="slider-range"><span>€0</span><span>€250</span><span>€500</span><span>€750</span><span>€1,000+</span></div>
+    </div>
+  `;
+  screen.querySelectorAll('.brand-card').forEach(b=>{
+    b.onclick = ()=>{
+      const id = b.dataset.b;
+      if(state.brands.has(id)) state.brands.delete(id); else state.brands.add(id);
+      render();
+    };
+  });
+  setupSlider();
+}
+
+function setupSlider(){
+  const track = document.getElementById('track');
+  const fill = document.getElementById('sfill');
+  const k1 = document.getElementById('k1');
+  const k2 = document.getElementById('k2');
+  const MAX = 1000;
+  function place(){
+    const a = state.budget[0]/MAX*100;
+    const b = state.budget[1]/MAX*100;
+    k1.style.left = a+"%"; k2.style.left = b+"%";
+    fill.style.left = a+"%"; fill.style.right = (100-b)+"%";
+  }
+  place();
+  function drag(knob, which){
+    knob.onmousedown = knob.ontouchstart = (e)=>{
+      e.preventDefault();
+      const move = (ev)=>{
+        const x = ev.touches?ev.touches[0].clientX:ev.clientX;
+        const rect = track.getBoundingClientRect();
+        let pct = Math.max(0, Math.min(1, (x-rect.left)/rect.width));
+        let v = Math.round(pct*MAX/10)*10;
+        if(which===0) state.budget[0] = Math.min(v, state.budget[1]-50);
+        else state.budget[1] = Math.max(v, state.budget[0]+50);
+        place();
+        // update labels only (don't re-render to avoid losing the drag)
+        const heads = document.querySelectorAll('.budget-head .v');
+        heads[0].innerHTML = `€${state.budget[0]}<span class="sub">min</span>`;
+        heads[1].innerHTML = `€${state.budget[1]}${state.budget[1]===1000?"+":""}<span class="sub">max</span>`;
+      };
+      const up = ()=>{
+        document.removeEventListener('mousemove', move);
+        document.removeEventListener('touchmove', move);
+        document.removeEventListener('mouseup', up);
+        document.removeEventListener('touchend', up);
+      };
+      document.addEventListener('mousemove', move);
+      document.addEventListener('touchmove', move, {passive:false});
+      document.addEventListener('mouseup', up);
+      document.addEventListener('touchend', up);
+    };
+  }
+  drag(k1, 0); drag(k2, 1);
+}
+
+function renderColors(){
+  screen.innerHTML = `
+    <div class="step-head">
+      <h2>Colours you <span class="em">live in.</span></h2>
+      <p>We'll bias your feed toward these tones — not to the exclusion of everything else.</p>
+    </div>
+    <div class="swatch-grid">
+      ${COLORS.map(c=>`<div style="text-align:center">
+        <div class="sw ${state.colors.has(c.id)?'on':''}" data-c="${c.id}" style="background:${c.c}"></div>
+        <div class="sw-lbl">${c.lbl}</div>
+      </div>`).join('')}
+    </div>
+    <div class="step-head" style="margin-top:20px">
+      <h2 style="font-size:32px">Condition <span class="em">tolerance.</span></h2>
+    </div>
+    <div class="pill-grid">
+      ${CONDITIONS.map(c=>`<div class="pill ${state.conditions.has(c.id)?'on':''}" data-c="${c.id}">
+        <span>${c.label}</span><span class="sub">${c.sub}</span><span class="check"></span>
+      </div>`).join('')}
+    </div>
+  `;
+  screen.querySelectorAll('.sw').forEach(s=>{
+    s.onclick = ()=>{
+      const id = s.dataset.c;
+      if(state.colors.has(id)) state.colors.delete(id); else state.colors.add(id);
+      render();
+    };
+  });
+  screen.querySelectorAll('.pill').forEach(p=>{
+    p.onclick = ()=>{
+      const id = p.dataset.c;
+      if(state.conditions.has(id)) state.conditions.delete(id); else state.conditions.add(id);
+      render();
+    };
+  });
+}
+
+function renderDone(){
+  const stylesArr = [...state.styles].map(id=>STYLES.find(s=>s.id===id).label);
+  const brandsArr = [...state.brands].map(id=>BRANDS.find(b=>b.id===id).name);
+  const colorsArr = [...state.colors].map(id=>COLORS.find(c=>c.id===id).lbl);
+  screen.innerHTML = `
+    <div class="done-screen">
+      <div class="burst">✦ Profile saved ✦</div>
+      <h2>Your AI style profile<br/>is <span class="em">ready.</span></h2>
+      <p class="lede">We've started curating a feed just for you. Every swipe you make from here sharpens what we show you next.</p>
+      <div class="profile-summary">
+        <div class="ps-item"><div class="lbl">Style DNA</div><div class="chips">${stylesArr.map(s=>`<span class="chip eco">${s}</span>`).join('')}</div></div>
+        <div class="ps-item"><div class="lbl">Size</div><div class="v">${state.size}</div></div>
+        <div class="ps-item"><div class="lbl">Favourite brands</div><div class="chips">${brandsArr.slice(0,4).map(s=>`<span class="chip">${s}</span>`).join('')}${brandsArr.length>4?`<span class="chip">+${brandsArr.length-4}</span>`:""}</div></div>
+        <div class="ps-item"><div class="lbl">Budget</div><div class="v">€${state.budget[0]} – €${state.budget[1]}${state.budget[1]===1000?"+":""}</div></div>
+        <div class="ps-item" style="grid-column:1/-1"><div class="lbl">Colours</div><div class="chips">${colorsArr.map(s=>`<span class="chip">${s}</span>`).join('')}</div></div>
+      </div>
+      <p class="mono" style="color:var(--mute)">Your first daily drop — 12 pieces — is waiting.</p>
+    </div>
+  `;
+}
+
+document.getElementById('next').onclick = ()=>{
+  if(state.step < state.total){ state.step++; render(); window.scrollTo(0,0); }
+  else { window.location.href = "swipe.html"; }
+};
+document.getElementById('back').onclick = ()=>{
+  if(state.step > 1){ state.step--; render(); window.scrollTo(0,0); }
+  else window.location.href = "rematch.html";
+};
+
+render();
+</script>
+</body>
+</html>
