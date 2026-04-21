@@ -1,0 +1,27 @@
+; ------------------------------------------------------------------
+; Zone file for matheusdoliveira.com
+; Purpose : point the domain at the GitHub Pages site
+;           https://mathdoliveira.github.io/  (repo: mathdoliveira.github.io)
+; Target  : import into Cloudflare (Dashboard -> DNS -> Records -> Import)
+; Format  : BIND. Cloudflare ignores SOA/NS on import and uses its own.
+; Note    : If you already use email on this domain, copy MX/SPF/DKIM
+;           records over manually -- they are intentionally not in here.
+; ------------------------------------------------------------------
+
+$ORIGIN matheusdoliveira.com.
+$TTL 3600
+
+; --- Apex (matheusdoliveira.com) -> GitHub Pages IPv4 ---
+@   3600  IN  A     185.199.108.153
+@   3600  IN  A     185.199.109.153
+@   3600  IN  A     185.199.110.153
+@   3600  IN  A     185.199.111.153
+
+; --- Apex (matheusdoliveira.com) -> GitHub Pages IPv6 ---
+@   3600  IN  AAAA  2606:50c0:8000::153
+@   3600  IN  AAAA  2606:50c0:8001::153
+@   3600  IN  AAAA  2606:50c0:8002::153
+@   3600  IN  AAAA  2606:50c0:8003::153
+
+; --- www subdomain -> GitHub Pages user site ---
+www 3600  IN  CNAME mathdoliveira.github.io.

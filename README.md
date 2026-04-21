@@ -2,7 +2,7 @@
 
 *A concept site for a luxury resale experience — swipe, match, love again.*
 
-Live site: **https://mathdoliveira.github.io/**
+Live site: **https://matheusdoliveira.com/** (via GitHub Pages)
 
 ## What's in here
 
