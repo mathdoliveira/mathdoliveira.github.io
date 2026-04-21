@@ -4,6 +4,16 @@
 <title>re:match — your daily swipe feed</title>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width,initial-scale=1" />
+<meta name="description" content="Your daily feed of pre-loved luxury. Swipe, save, or pass — every card is a story.">
+<meta name="theme-color" content="#f2ede4">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="canonical" href="https://mathdoliveira.github.io/swipe.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="re:match">
+<meta property="og:title" content="Your daily swipe feed — re:match">
+<meta property="og:description" content="Swipe. Match. Love again.">
+<meta property="og:image" content="https://mathdoliveira.github.io/uploads/concept%20webpage.png">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&family=Caveat:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
@@ -134,9 +144,9 @@
 
 <nav class="top">
   <div class="nav-inner">
-    <a href="rematch.html" class="logo"><div class="mark">re:match</div><div class="sub">Fashion you love. Again.</div></a>
+    <a href="./" class="logo"><div class="mark">re:match</div><div class="sub">Fashion you love. Again.</div></a>
     <div class="navlinks">
-      <a href="rematch.html">Home</a>
+      <a href="./">Home</a>
       <a href="swipe.html" class="active">Swipe feed</a>
       <a href="product.html">Product</a>
       <a href="sell.html">Sell</a>
@@ -219,7 +229,7 @@
 
     <div class="actions">
       <div style="text-align:center">
-        <button class="a-btn x" id="btn-x"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round"><path d="M5 5 L 19 19 M 19 5 L 5 19"/></svg></button>
+        <button class="a-btn x" id="btn-x" aria-label="Pass on this piece" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true" focusable="false"><path d="M5 5 L 19 19 M 19 5 L 5 19"/></svg></button>
         <div class="a-lbl">Pass</div>
       </div>
       <div style="text-align:center">
@@ -227,11 +237,11 @@
         <div class="a-lbl">Details</div>
       </div>
       <div style="text-align:center">
-        <button class="a-btn star" id="btn-star"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M12 3 L 14.5 9.5 L 21 10 L 16 14.5 L 17.5 21 L 12 17.5 L 6.5 21 L 8 14.5 L 3 10 L 9.5 9.5 Z"/></svg></button>
+        <button class="a-btn star" id="btn-star" aria-label="Save this piece to favorites" type="button"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" aria-hidden="true" focusable="false"><path d="M12 3 L 14.5 9.5 L 21 10 L 16 14.5 L 17.5 21 L 12 17.5 L 6.5 21 L 8 14.5 L 3 10 L 9.5 9.5 Z"/></svg></button>
         <div class="a-lbl">Save</div>
       </div>
       <div style="text-align:center">
-        <button class="a-btn heart" id="btn-heart"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M12 20 C 4 14, 3 8, 7 6 C 10 4.5, 12 7, 12 9 C 12 7, 14 4.5, 17 6 C 21 8, 20 14, 12 20Z"/></svg></button>
+        <button class="a-btn heart" id="btn-heart" aria-label="Love this piece" type="button"><svg viewBox="0 0 24 24" fill="currentColor" aria-hidden="true" focusable="false"><path d="M12 20 C 4 14, 3 8, 7 6 C 10 4.5, 12 7, 12 9 C 12 7, 14 4.5, 17 6 C 21 8, 20 14, 12 20Z"/></svg></button>
         <div class="a-lbl">Love</div>
       </div>
     </div>
@@ -438,6 +448,15 @@ document.getElementById('btn-star').onclick = ()=>{
   setTimeout(()=>t.style.transform='scale(1) rotate(0deg)', 240);
 };
 document.getElementById('btn-info').onclick = ()=>window.location.href='product.html';
+
+// Keyboard: ← pass, → love, ↑/S save (ignore when typing in an input/textarea)
+window.addEventListener('keydown', (e)=>{
+  const t = e.target;
+  if(t && (t.tagName === 'INPUT' || t.tagName === 'TEXTAREA' || t.isContentEditable)) return;
+  if(e.key === 'ArrowLeft')  { e.preventDefault(); document.getElementById('btn-x').click(); }
+  else if(e.key === 'ArrowRight') { e.preventDefault(); document.getElementById('btn-heart').click(); }
+  else if(e.key === 'ArrowUp' || e.key === 's' || e.key === 'S') { e.preventDefault(); document.getElementById('btn-star').click(); }
+});
 document.getElementById('mclose').onclick = ()=>document.getElementById('modal').classList.remove('on');
 document.getElementById('keep').onclick = ()=>document.getElementById('modal').classList.remove('on');
 

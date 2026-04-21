@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>re:match — page not found</title>
+<meta name="description" content="The piece you were looking for has left the rack.">
+<meta name="theme-color" content="#f2ede4">
+<meta name="robots" content="noindex">
+<link rel="icon" type="image/svg+xml" href="favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=Instrument+Serif:ital@0;1&family=Inter+Tight:wght@400;500;600&family=Caveat:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="rematch.css">
+<style>
+  .notfound{
+    position:relative;z-index:1;max-width:780px;margin:0 auto;padding:120px 44px 80px;
+    display:grid;gap:28px;text-align:left;
+  }
+  .nf-label{display:flex;align-items:center;gap:12px;color:var(--mute);font-family:"JetBrains Mono",monospace;font-size:11px;letter-spacing:.18em;text-transform:uppercase}
+  .nf-label .dot{width:6px;height:6px;border-radius:50%;background:var(--clay)}
+  .nf-num{
+    font-family:"DM Serif Display",serif;font-size:clamp(140px,22vw,240px);line-height:.9;letter-spacing:-.04em;color:var(--forest);margin:0;position:relative;
+  }
+  .nf-num .tear{
+    font-family:"Instrument Serif",serif;font-style:italic;color:var(--gold);font-size:.45em;display:inline-block;transform:translateY(-.3em) rotate(-4deg);margin-left:.1em
+  }
+  .nf-title{font-family:"DM Serif Display",serif;font-size:44px;line-height:1.05;letter-spacing:-.02em;margin:0}
+  .nf-title .em{font-family:"Instrument Serif",serif;font-style:italic;color:var(--forest)}
+  .nf-lede{font-size:17px;color:var(--ink-soft);max-width:460px;margin:0;line-height:1.6}
+  .nf-note{font-family:"Caveat",cursive;font-size:22px;color:var(--clay);margin-top:-8px}
+  .nf-ctas{display:flex;gap:12px;flex-wrap:wrap;margin-top:12px}
+  .nf-tape{
+    position:absolute;top:76px;right:44px;width:160px;height:26px;
+    background:repeating-linear-gradient(-8deg, rgba(176,138,74,.45) 0 18px, rgba(176,138,74,.28) 18px 36px);
+    border:1px dashed rgba(30,35,28,.25);transform:rotate(-6deg);opacity:.75;
+    display:grid;place-items:center;font-family:"JetBrains Mono",monospace;font-size:10px;letter-spacing:.2em;color:var(--forest-deep)
+  }
+  .nf-foot{margin-top:auto;padding:20px 44px;border-top:1px solid var(--line);display:flex;justify-content:space-between;font-size:11px;color:var(--mute);font-family:"JetBrains Mono",monospace;letter-spacing:.12em;text-transform:uppercase}
+  body{min-height:100vh;display:flex;flex-direction:column}
+  main{flex:1}
+</style>
+</head>
+<body>
+<main>
+  <div class="nf-tape">not on the rack</div>
+  <section class="notfound">
+    <div class="nf-label"><span class="dot"></span><span>error · 404</span></div>
+    <h1 class="nf-num">4<span class="tear">∅</span>4</h1>
+    <h2 class="nf-title">This piece has <span class="em">left the rack.</span></h2>
+    <p class="nf-lede">The URL you followed doesn't point to anything we're currently holding. Maybe it sold, maybe it never existed — either way, the closet is wide open.</p>
+    <p class="nf-note">go find something else to love →</p>
+    <div class="nf-ctas">
+      <a class="btn btn-dark btn-lg" href="./">Back to the feed</a>
+      <a class="btn btn-lg" href="swipe.html">Start swiping</a>
+    </div>
+  </section>
+</main>
+<div class="nf-foot">
+  <span>re:match · est. 2026</span>
+  <span>lost &amp; found</span>
+</div>
+</body>
+</html>
