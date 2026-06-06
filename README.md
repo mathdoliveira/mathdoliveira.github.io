@@ -1,16 +1,18 @@
 ---
-title: re:match
-emoji: 👗
-colorFrom: green
-colorTo: yellow
+title: Luxury Beyond Income
+emoji: 📊
+colorFrom: blue
+colorTo: gray
 sdk: static
 pinned: false
-short_description: The fashion matchmaker — swipe, match, love again.
+short_description: Survey findings on luxury consumption among urban middle-class Brazilians.
 ---
 
-# re:match
+# Luxury Beyond Income
 
-*A concept site for a luxury resale experience — swipe, match, love again.*
+A findings-and-interpretation report from a Master's dissertation on how urban
+middle-class Brazilians desire, access, justify and pay for luxury (survey of 204
+consumers).
 
 Live site: **https://matheusdoliveira.com/** (via GitHub Pages)
 
@@ -18,27 +20,19 @@ Live site: **https://matheusdoliveira.com/** (via GitHub Pages)
 
 | File | Role |
 |------|------|
-| `index.html` | Landing page (hero, swipe deck demo, editorial sections) |
-| `onboarding.html` | Four-step style profile builder |
-| `swipe.html` | Full daily swipe feed |
-| `product.html` | Example product detail page |
-| `sell.html` | "List a piece" flow |
-| `404.html` | Branded not-found page |
-| `rematch.css` | Shared design tokens + components |
-| `rematch.html` | Legacy URL → redirects to `/` |
+| `index.html` | The data-story report (figures, inferential statistics, interpretation) |
+| `figures/` | Publication-quality charts (Okabe-Ito palette, 300 dpi) |
 | `favicon.svg` | Inline SVG favicon |
-| `uploads/` | Design references and OG preview asset |
+| `CNAME` | Custom domain (matheusdoliveira.com) |
 
-## Keyboard shortcuts (swipe pages)
-
-- `←` pass on the piece
-- `→` love it
-- `↑` or `S` save for later
+Every figure is colour-blind-safe and every number traces to the raw survey
+responses; the two flagged gradients are statistically tested (chi-square and
+Cochran-Armitage trend, Cramér's V, Spearman, Benjamini-Hochberg correction).
 
 ## Deploying
 
-The site is static — GitHub Pages serves it straight from `main`. No build step.
+The site is static. GitHub Pages serves it straight from `main`. No build step.
 
 ## Credits
 
-Design and prototype by Matheus d'Oliveira.
+Topal Pelegrino, G. and de Oliveira Alves, M. H.
